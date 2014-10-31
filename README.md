@@ -9,3 +9,4 @@ Lead Maintainer: [Adam Bretz](https://github.com/arb)
 ## Usage
 
 `good-console` is a [good-reporter](https://github.com/hapijs/good-reporter) implementation to write [hapi](http://hapijs.com/) server events to the console.
+
