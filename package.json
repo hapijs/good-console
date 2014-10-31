@@ -1,0 +1,28 @@
+{
+  "name": "good-console",
+  "version": "0.0.1",
+  "repository": "git://github.com/hapijs/good-console",
+  "description": "Console broadcasting for Good process monitor",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test-cov"
+  },
+  "dependencies": {
+    "good-reporter": "2.x.x",
+    "hoek": "2.x.x",
+    "json-stringify-safe": "5.0.x",
+    "moment": "2.8.x"
+  },
+  "devDependencies": {
+    "lab": "4.x.x"
+  },
+  "engines": {
+    "node": ">=0.10.x"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/hapijs/good-console/raw/master/LICENSE"
+    }
+  ]
+}
