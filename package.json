@@ -1,6 +1,6 @@
 {
   "name": "good-console",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "repository": "git://github.com/hapijs/good-console",
   "description": "Console broadcasting for Good process monitor",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "test": "make test-cov"
   },
   "dependencies": {
-    "good-reporter": "2.x.x",
+    "good-reporter": "3.x.x",
     "hoek": "2.x.x",
     "json-stringify-safe": "5.0.x",
     "moment": "2.8.x"

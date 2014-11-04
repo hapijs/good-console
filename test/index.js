@@ -97,7 +97,7 @@ describe('GoodConsole', function () {
 
             it('logs to the console for "request" events', function (done) {
 
-                var reporter = new GoodConsole();
+                var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
                 var timeString = GoodConsole.timeString(now);
                 var ee = new EventEmitter();
@@ -120,7 +120,7 @@ describe('GoodConsole', function () {
 
             it('logs to the console for "request" events without a query', function (done) {
 
-                var reporter = new GoodConsole();
+                var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
                 var timeString = GoodConsole.timeString(now);
                 var event = Hoek.clone(internals.request);
@@ -145,7 +145,7 @@ describe('GoodConsole', function () {
 
             it('logs to the console for "request" events without a responsePayload', function (done) {
 
-                var reporter = new GoodConsole();
+                var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
                 var timeString = GoodConsole.timeString(now);
                 var event = Hoek.clone(internals.request);
@@ -170,7 +170,7 @@ describe('GoodConsole', function () {
 
             it('provides a default color for request methods', function (done) {
 
-                var reporter = new GoodConsole();
+                var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
                 var timeString = GoodConsole.timeString(now);
                 var event = Hoek.clone(internals.request);
@@ -194,7 +194,7 @@ describe('GoodConsole', function () {
 
             it('does not log a status code if there is not one attached', function (done) {
 
-                var reporter = new GoodConsole();
+                var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
                 var timeString = GoodConsole.timeString(now);
                 var event = Hoek.clone(internals.request);
@@ -220,7 +220,7 @@ describe('GoodConsole', function () {
             it('uses different colors for different status codes', function (done) {
 
                 var counter = 1;
-                var reporter = new GoodConsole();
+                var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
                 var timeString = GoodConsole.timeString(now);
                 var colors = {
@@ -262,11 +262,7 @@ describe('GoodConsole', function () {
 
         it('prints ops events', function (done) {
 
-            var reporter = new GoodConsole({
-                events:{
-                    ops: '*'
-                }
-            });
+            var reporter = new GoodConsole({ ops: '*' });
             var now = Date.now();
             var timeString = GoodConsole.timeString(now);
             var event = Hoek.clone(internals.ops);
@@ -289,11 +285,7 @@ describe('GoodConsole', function () {
 
         it('prints error events', function (done) {
 
-            var reporter = new GoodConsole({
-                events:{
-                    error: '*'
-                }
-            });
+            var reporter = new GoodConsole({ error: '*' });
             var now = Date.now();
             var timeString = GoodConsole.timeString(now);
             var event = {
@@ -320,11 +312,7 @@ describe('GoodConsole', function () {
 
         it('has a fallback for unknown event types', function (done) {
 
-            var reporter = new GoodConsole({
-                events: {
-                    test: '*'
-                }
-            });
+            var reporter = new GoodConsole({ test: '*' }, {});
             var now = Date.now();
             var timeString = GoodConsole.timeString(now);
             var event = {
