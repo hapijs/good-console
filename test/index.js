@@ -97,7 +97,7 @@ describe('GoodConsole', function () {
 
             it('logs to the console for "request" events', function (done) {
 
-                var reporter = new GoodConsole({ request:'*' });
+                var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
                 var timeString = GoodConsole.timeString(now);
                 var ee = new EventEmitter();
