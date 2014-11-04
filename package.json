@@ -1,6 +1,6 @@
 {
   "name": "good-console",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "repository": "git://github.com/hapijs/good-console",
   "description": "Console broadcasting for Good process monitor",
   "main": "index.js",
