@@ -1,11 +1,12 @@
 // Load modules
+var Code = require('code');
+var EventEmitter = require('events').EventEmitter;
 var Fs = require('fs');
-var Path = require('path');
-var Util = require('util');
 var Hoek = require('hoek');
 var Lab = require('lab');
+var Path = require('path');
+var Util = require('util');
 var GoodConsole = require('..');
-var EventEmitter = require('events').EventEmitter;
 
 
 // Declare internals
@@ -51,7 +52,7 @@ internals.request = {
 // Test shortcuts
 
 var lab = exports.lab = Lab.script();
-var expect = Lab.expect;
+var expect = Code.expect;
 var before = lab.before;
 var after = lab.after;
 var describe = lab.describe;
@@ -112,7 +113,7 @@ describe('GoodConsole', function () {
 
                 reporter.start(ee, function (err) {
 
-                    expect(err).to.not.exist;
+                    expect(err).to.not.exist();
 
                     ee.emit('report', 'request', internals.request);
                 });
@@ -138,7 +139,7 @@ describe('GoodConsole', function () {
 
                 reporter.start(ee, function (err) {
 
-                    expect(err).to.not.exist;
+                    expect(err).to.not.exist();
                     ee.emit('report', 'request', event);
                 });
             });
@@ -163,7 +164,7 @@ describe('GoodConsole', function () {
 
                 reporter.start(ee, function (err) {
 
-                    expect(err).to.not.exist;
+                    expect(err).to.not.exist();
                     ee.emit('report', 'request', event);
                 });
             });
@@ -187,7 +188,7 @@ describe('GoodConsole', function () {
 
                 reporter.start(ee, function (err) {
 
-                    expect(err).to.not.exist;
+                    expect(err).to.not.exist();
                     ee.emit('report', 'request', event);
                 });
             });
@@ -211,7 +212,7 @@ describe('GoodConsole', function () {
 
                 reporter.start(ee, function (err) {
 
-                    expect(err).to.not.exist;
+                    expect(err).to.not.exist();
                     ee.emit('report', 'request', event);
                 });
 
@@ -244,7 +245,7 @@ describe('GoodConsole', function () {
 
                 reporter.start(ee, function (err) {
 
-                    expect(err).to.not.exist;
+                    expect(err).to.not.exist();
 
                     for (var i = 1; i < 6; ++i) {
                         var event = Hoek.clone(internals.request);
@@ -278,7 +279,7 @@ describe('GoodConsole', function () {
 
             reporter.start(ee, function (err) {
 
-                expect(err).to.not.exist;
+                expect(err).to.not.exist();
                 ee.emit('report', 'ops', event);
             });
         });
@@ -305,7 +306,7 @@ describe('GoodConsole', function () {
 
             reporter.start(ee, function (err) {
 
-                expect(err).to.not.exist;
+                expect(err).to.not.exist();
                 ee.emit('report', 'error', event);
             });
         });
@@ -334,7 +335,7 @@ describe('GoodConsole', function () {
 
             reporter.start(ee, function (err) {
 
-                expect(err).to.not.exist;
+                expect(err).to.not.exist();
                 ee.emit('report', 'test', event);
             });
         });
