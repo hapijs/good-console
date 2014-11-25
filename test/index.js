@@ -11,7 +11,11 @@ var GoodConsole = require('..');
 
 // Declare internals
 
-var internals = {};
+var internals = {
+    defaults: {
+        format: 'YYMMDD/HHmmss.SSS'
+    }
+};
 internals.ops = {
     event: 'ops',
     timestamp: 1411583264547,
@@ -86,9 +90,18 @@ describe('GoodConsole', function () {
     it('timeString() correctly formats the time', function (done) {
 
         var time = new Date(1396207735000);
-        var result = GoodConsole.timeString(time);
+        var result = GoodConsole.timeString(time, internals.defaults.format);
 
         expect(result).to.equal('140330/192855.000');
+        done();
+    });
+
+    it('timeString() supports custom timestamp formats', function (done) {
+
+        var time = new Date(1396207735000);
+        var result = GoodConsole.timeString(time, 'YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+        expect(result).to.equal('2014-03-30T19:28:55.000Z');
         done();
     });
 
@@ -100,7 +113,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now);
+                var timeString = GoodConsole.timeString(now, internals.defaults.format);
                 var ee = new EventEmitter();
 
                 console.log = function (value) {
@@ -123,7 +136,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now);
+                var timeString = GoodConsole.timeString(now, internals.defaults.format);
                 var event = Hoek.clone(internals.request);
                 var ee = new EventEmitter();
 
@@ -148,7 +161,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now);
+                var timeString = GoodConsole.timeString(now, internals.defaults.format);
                 var event = Hoek.clone(internals.request);
                 var ee = new EventEmitter();
 
@@ -173,7 +186,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now);
+                var timeString = GoodConsole.timeString(now, internals.defaults.format);
                 var event = Hoek.clone(internals.request);
                 var ee = new EventEmitter();
 
@@ -197,7 +210,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now);
+                var timeString = GoodConsole.timeString(now, internals.defaults.format);
                 var event = Hoek.clone(internals.request);
                 var ee = new EventEmitter();
 
@@ -223,7 +236,7 @@ describe('GoodConsole', function () {
                 var counter = 1;
                 var reporter = new GoodConsole({ request: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now);
+                var timeString = GoodConsole.timeString(now, internals.defaults.format);
                 var colors = {
                     1: 32,
                     2: 32,
@@ -265,7 +278,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ ops: '*' });
             var now = Date.now();
-            var timeString = GoodConsole.timeString(now);
+            var timeString = GoodConsole.timeString(now, internals.defaults.format);
             var event = Hoek.clone(internals.ops);
             var ee = new EventEmitter();
 
@@ -288,7 +301,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ error: '*' });
             var now = Date.now();
-            var timeString = GoodConsole.timeString(now);
+            var timeString = GoodConsole.timeString(now, internals.defaults.format);
             var event = {
                 event: 'error',
                 message: 'test message',
@@ -315,7 +328,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' }, {});
             var now = Date.now();
-            var timeString = GoodConsole.timeString(now);
+            var timeString = GoodConsole.timeString(now, internals.defaults.format);
             var event = {
                 event: 'test',
                 data: {
