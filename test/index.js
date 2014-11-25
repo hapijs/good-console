@@ -92,6 +92,15 @@ describe('GoodConsole', function () {
         done();
     });
 
+    it('timeString() supports custom timestamp formats', function (done) {
+
+        var time = new Date(1396207735000);
+        var result = GoodConsole.timeString(time, 'YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+        expect(result).to.equal('2014-03-30T19:28:55.000Z');
+        done();
+    });
+
     describe('_report()', function () {
 
         describe('printRequest()', function () {
