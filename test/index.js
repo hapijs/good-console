@@ -1,10 +1,10 @@
 // Load modules
 var EventEmitter = require('events').EventEmitter;
+var Util = require('util');
 var Code = require('code');
 var Hoek = require('hoek');
 var Lab = require('lab');
 var Moment = require('moment');
-var Util = require('util');
 var GoodConsole = require('..');
 
 
