@@ -10,18 +10,12 @@ Lead Maintainer: [Adam Bretz](https://github.com/arb)
 
 `good-console` is a [good-reporter](https://github.com/hapijs/good-reporter) implementation to write [hapi](http://hapijs.com/) server events to the console.
 
-All log messages are preceded with a timestamp, which default format is `YYMMDD/HHmmss.SSS`. You can also set a custom format according to [Moment.js' date formatting rules](http://momentjs.com/docs/#/displaying/format/).
+## Good Console
+### new GoodConsole(events, [options])
+creates a new GoodFile object with the following arguments
 
-Example configuration for hapi:
-```js
-var options = {
-    reporters: [{
-        reporter: require('good-console'),
-        args:[
-            { log: '*', request: '*'},
-            // ISO 8601 date format
-            { format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]' }
-        ]
-    }]
-};
-```
+- `events` - an object of key value pairs.
+	- `key` - one of the supported [good events](https://github.com/hapijs/good) indicating the hapi event to subscribe to
+	- `value` - a single string or an array of strings to filter incoming events. "\*" indicates no filtering. `null` and `undefined` are assumed to be "\*"
+- `[options]` -
+	- `format` - [MomentJS](http://momentjs.com/docs/#/displaying/format/) format string. Defaults to 'YYMMDD/HHmmss.SSS'.
