@@ -307,7 +307,7 @@ describe('GoodConsole', function () {
 
         it('has a fallback for unknown event types', function (done) {
 
-            var reporter = new GoodConsole({ test: '*' }, {});
+            var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
             var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
