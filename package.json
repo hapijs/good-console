@@ -13,6 +13,9 @@
     "json-stringify-safe": "5.0.x",
     "moment": "2.8.x"
   },
+  "peerDependencies": {
+    "good": ">= 5.x.x"
+  },
   "devDependencies": {
     "code": "1.x.x",
     "lab": "5.x.x"

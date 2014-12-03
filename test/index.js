@@ -1,11 +1,10 @@
 // Load modules
-var Code = require('code');
 var EventEmitter = require('events').EventEmitter;
-var Fs = require('fs');
+var Util = require('util');
+var Code = require('code');
 var Hoek = require('hoek');
 var Lab = require('lab');
-var Path = require('path');
-var Util = require('util');
+var Moment = require('moment');
 var GoodConsole = require('..');
 
 
@@ -36,8 +35,8 @@ internals.ops = {
     load: { requests: {}, concurrents: {}, responseTimes: {} },
     pid: 64291
 };
-internals.request = {
-    event: 'request',
+internals.response = {
+    event: 'response',
     method: 'post',
     statusCode: 200,
     timestamp: Date.now(),
@@ -87,68 +86,46 @@ describe('GoodConsole', function () {
         done();
     });
 
-    describe('_timeString()', function () {
-
-        it('correctly formats the time', function (done) {
-
-            var time = new Date(1396207735000);
-            var result = GoodConsole.timeString(time, internals.defaults.format);
-
-            expect(result).to.equal('140330/192855.000');
-            done();
-        });
-
-        it('supports custom timestamp formats', function (done) {
-
-            var time = new Date(1396207735000);
-            var result = GoodConsole.timeString(time, 'YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-
-            expect(result).to.equal('2014-03-30T19:28:55.000Z');
-            done();
-        });
-
-    });
-
     describe('_report()', function () {
 
-        describe('printRequest()', function () {
+        describe('printResponse()', function () {
 
-            it('logs to the console for "request" events', function (done) {
+            it('logs to the console for "response" events', function (done) {
 
-                var reporter = new GoodConsole({ request: '*' });
+                var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now, internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
                 var ee = new EventEmitter();
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', request, localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
-                internals.request.timestamp = now;
+                internals.response.timestamp = now;
 
                 reporter.start(ee, function (err) {
 
                     expect(err).to.not.exist();
 
-                    ee.emit('report', 'request', internals.request);
+                    ee.emit('report', 'response', internals.response);
                 });
             });
 
-            it('logs to the console for "request" events without a query', function (done) {
+            it('logs to the console for "response" events without a query', function (done) {
 
-                var reporter = new GoodConsole({ request: '*' });
+                var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now, internals.defaults.format);
-                var event = Hoek.clone(internals.request);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var event = Hoek.clone(internals.response);
                 var ee = new EventEmitter();
 
                 delete event.query;
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', request, localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
@@ -157,23 +134,23 @@ describe('GoodConsole', function () {
                 reporter.start(ee, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'request', event);
+                    ee.emit('report', 'response', event);
                 });
             });
 
-            it('logs to the console for "request" events without a responsePayload', function (done) {
+            it('logs to the console for "response" events without a responsePayload', function (done) {
 
-                var reporter = new GoodConsole({ request: '*' });
+                var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now, internals.defaults.format);
-                var event = Hoek.clone(internals.request);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var event = Hoek.clone(internals.response);
                 var ee = new EventEmitter();
 
                 delete event.responsePayload;
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', request, localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
+                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
                     done();
                 };
 
@@ -182,21 +159,21 @@ describe('GoodConsole', function () {
                 reporter.start(ee, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'request', event);
+                    ee.emit('report', 'response', event);
                 });
             });
 
-            it('provides a default color for request methods', function (done) {
+            it('provides a default color for response methods', function (done) {
 
-                var reporter = new GoodConsole({ request: '*' });
+                var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now, internals.defaults.format);
-                var event = Hoek.clone(internals.request);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var event = Hoek.clone(internals.response);
                 var ee = new EventEmitter();
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', request, localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', response, localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
@@ -206,21 +183,21 @@ describe('GoodConsole', function () {
                 reporter.start(ee, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'request', event);
+                    ee.emit('report', 'response', event);
                 });
             });
 
             it('does not log a status code if there is not one attached', function (done) {
 
-                var reporter = new GoodConsole({ request: '*' });
+                var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now, internals.defaults.format);
-                var event = Hoek.clone(internals.request);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var event = Hoek.clone(internals.response);
                 var ee = new EventEmitter();
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', request, localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
@@ -230,7 +207,7 @@ describe('GoodConsole', function () {
                 reporter.start(ee, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'request', event);
+                    ee.emit('report', 'response', event);
                 });
 
             });
@@ -238,9 +215,9 @@ describe('GoodConsole', function () {
             it('uses different colors for different status codes', function (done) {
 
                 var counter = 1;
-                var reporter = new GoodConsole({ request: '*' });
+                var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = GoodConsole.timeString(now, internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
                 var colors = {
                     1: 32,
                     2: 32,
@@ -252,7 +229,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    var expected = Util.format('%s, request, localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
+                    var expected = Util.format('%s, response, localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
                     expect(value).to.equal(expected);
                     counter++;
 
@@ -265,14 +242,14 @@ describe('GoodConsole', function () {
                     expect(err).to.not.exist();
 
                     for (var i = 1; i < 6; ++i) {
-                        var event = Hoek.clone(internals.request);
+                        var event = Hoek.clone(internals.response);
                         event.statusCode = i * 100;
                         event.timestamp = now;
 
                         delete event.query;
                         delete event.responsePayload;
 
-                        ee.emit('report', 'request', event);
+                        ee.emit('report', 'response', event);
                     }
                 });
             });
@@ -282,7 +259,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ ops: '*' });
             var now = Date.now();
-            var timeString = GoodConsole.timeString(now, internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = Hoek.clone(internals.ops);
             var ee = new EventEmitter();
 
@@ -305,7 +282,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ error: '*' });
             var now = Date.now();
-            var timeString = GoodConsole.timeString(now, internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'error',
                 message: 'test message',
@@ -332,7 +309,36 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' }, {});
             var now = Date.now();
-            var timeString = GoodConsole.timeString(now, internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var event = {
+                event: 'test',
+                data: {
+                    reason: 'for testing'
+                },
+                tags: ['user']
+            };
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                expect(value).to.equal(timeString + ', user, {"reason":"for testing"}');
+                done();
+            };
+
+            event.timestamp = now;
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'test', event);
+            });
+        });
+
+        it('formats the timestamp based on the supplied option', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY'});
+            var now = Date.now();
+            var timeString = Moment.utc(now).format('YYYY');
             var event = {
                 event: 'test',
                 data: {
