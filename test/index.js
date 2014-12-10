@@ -305,7 +305,7 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('has a fallback for unknown event types', function (done) {
+        it('has a fallback for unknown event types with tags', function (done) {
 
             var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
@@ -322,6 +322,34 @@ describe('GoodConsole', function () {
             console.log = function (value) {
 
                 expect(value).to.equal(timeString + ', user, {"reason":"for testing"}');
+                done();
+            };
+
+            event.timestamp = now;
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'test', event);
+            });
+        });
+
+        it('has a fallback for unknown event types without tags', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var event = {
+                event: 'test',
+                data: {
+                    reason: 'for testing'
+                }
+            };
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                expect(value).to.equal(timeString + ', , {"reason":"for testing"}');
                 done();
             };
 
