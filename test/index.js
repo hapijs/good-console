@@ -285,8 +285,10 @@ describe('GoodConsole', function () {
             var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'error',
-                message: 'test message',
-                stack: 'fake stack for testing'
+                error: {
+                    message: 'test message',
+                    stack: 'fake stack for testing'
+                }
             };
             var ee = new EventEmitter();
 
