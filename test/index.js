@@ -307,11 +307,9 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('has a fallback for unknown event types with tags', function (done) {
+        it('prints a warning message for unknown event types', function (done) {
 
             var reporter = new GoodConsole({ test: '*' });
-            var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 data: {
@@ -323,39 +321,9 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                expect(value).to.equal(timeString + ', user, {"reason":"for testing"}');
+                expect(value).to.equal('Unknown event "%s" occurred with timestamp %s.');
                 done();
             };
-
-            event.timestamp = now;
-
-            reporter.start(ee, function (err) {
-
-                expect(err).to.not.exist();
-                ee.emit('report', 'test', event);
-            });
-        });
-
-        it('has a fallback for unknown event types without tags', function (done) {
-
-            var reporter = new GoodConsole({ test: '*' });
-            var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
-            var event = {
-                event: 'test',
-                data: {
-                    reason: 'for testing'
-                }
-            };
-            var ee = new EventEmitter();
-
-            console.log = function (value) {
-
-                expect(value).to.equal(timeString + ', , {"reason":"for testing"}');
-                done();
-            };
-
-            event.timestamp = now;
 
             reporter.start(ee, function (err) {
 
@@ -370,7 +338,7 @@ describe('GoodConsole', function () {
             var now = Date.now();
             var timeString = Moment.utc(now).format('YYYY');
             var event = {
-                event: 'test',
+                event: 'r',
                 data: {
                     reason: 'for testing'
                 },
@@ -378,12 +346,13 @@ describe('GoodConsole', function () {
             };
             var ee = new EventEmitter();
 
-            console.log = function (value) {
+            console.log = function (value, event, time) {
 
-                expect(value).to.equal(timeString + ', user, {"reason":"for testing"}');
+                var result = Util.format(value, event, time);
+
+                expect(result).to.equal('Unknown event "test" occurred with timestamp ' + timeString + '.');
                 done();
             };
-
             event.timestamp = now;
 
             reporter.start(ee, function (err) {
