@@ -51,6 +51,16 @@ internals.response = {
         value: 1
     }
 };
+internals.request = {
+    event: 'request',
+    timestamp: 1411583264547,
+    tags: ['user', 'info'],
+    data: 'you made a request',
+    pid: 64291,
+    id: '1419005623332:new-host.local:48767:i3vrb3z7:10000',
+    method: 'get',
+    path: '/'
+};
 
 // Test shortcuts
 
@@ -307,6 +317,51 @@ describe('GoodConsole', function () {
             });
         });
 
+        it('prints request events with string data', function (done) {
+
+            var reporter = new GoodConsole({ request: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                expect(value).to.equal(timeString + ', request,user,info, data: you made a request');
+                done();
+            };
+
+            internals.request.timestamp = now;
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'request', internals.request);
+            });
+        });
+
+        it('prints request events with object data', function (done) {
+
+            var reporter = new GoodConsole({ request: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                expect(value).to.equal(timeString + ', request,user,info, data: {"message":"you made a request to a resource"}');
+                done();
+            };
+
+            internals.request.timestamp = now;
+            internals.request.data = { message: 'you made a request to a resource' };
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'request', internals.request);
+            });
+        });
+
         it('prints a warning message for unknown event types', function (done) {
 
             var reporter = new GoodConsole({ test: '*' });
@@ -338,7 +393,7 @@ describe('GoodConsole', function () {
             var now = Date.now();
             var timeString = Moment.utc(now).format('YYYY');
             var event = {
-                event: 'r',
+                event: 'test',
                 data: {
                     reason: 'for testing'
                 },
