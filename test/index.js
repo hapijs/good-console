@@ -51,6 +51,16 @@ internals.response = {
         value: 1
     }
 };
+internals.request = {
+    event: 'request',
+    timestamp: 1411583264547,
+    tags: ['user', 'info'],
+    data: 'you made a request',
+    pid: 64291,
+    id: '1419005623332:new-host.local:48767:i3vrb3z7:10000',
+    method: 'get',
+    path: '/'
+};
 
 // Test shortcuts
 
@@ -307,11 +317,54 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('has a fallback for unknown event types with tags', function (done) {
+        it('prints request events with string data', function (done) {
 
-            var reporter = new GoodConsole({ test: '*' });
+            var reporter = new GoodConsole({ request: '*' });
             var now = Date.now();
             var timeString = Moment.utc(now).format(internals.defaults.format);
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                expect(value).to.equal(timeString + ', request,user,info, data: you made a request');
+                done();
+            };
+
+            internals.request.timestamp = now;
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'request', internals.request);
+            });
+        });
+
+        it('prints request events with object data', function (done) {
+
+            var reporter = new GoodConsole({ request: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                expect(value).to.equal(timeString + ', request,user,info, data: {"message":"you made a request to a resource"}');
+                done();
+            };
+
+            internals.request.timestamp = now;
+            internals.request.data = { message: 'you made a request to a resource' };
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'request', internals.request);
+            });
+        });
+
+        it('prints a warning message for unknown event types', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' });
             var event = {
                 event: 'test',
                 data: {
@@ -323,39 +376,9 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                expect(value).to.equal(timeString + ', user, {"reason":"for testing"}');
+                expect(value).to.equal('Unknown event "%s" occurred with timestamp %s.');
                 done();
             };
-
-            event.timestamp = now;
-
-            reporter.start(ee, function (err) {
-
-                expect(err).to.not.exist();
-                ee.emit('report', 'test', event);
-            });
-        });
-
-        it('has a fallback for unknown event types without tags', function (done) {
-
-            var reporter = new GoodConsole({ test: '*' });
-            var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
-            var event = {
-                event: 'test',
-                data: {
-                    reason: 'for testing'
-                }
-            };
-            var ee = new EventEmitter();
-
-            console.log = function (value) {
-
-                expect(value).to.equal(timeString + ', , {"reason":"for testing"}');
-                done();
-            };
-
-            event.timestamp = now;
 
             reporter.start(ee, function (err) {
 
@@ -378,12 +401,13 @@ describe('GoodConsole', function () {
             };
             var ee = new EventEmitter();
 
-            console.log = function (value) {
+            console.log = function (value, event, time) {
 
-                expect(value).to.equal(timeString + ', user, {"reason":"for testing"}');
+                var result = Util.format(value, event, time);
+
+                expect(result).to.equal('Unknown event "test" occurred with timestamp ' + timeString + '.');
                 done();
             };
-
             event.timestamp = now;
 
             reporter.start(ee, function (err) {
