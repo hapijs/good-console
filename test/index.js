@@ -387,6 +387,62 @@ describe('GoodConsole', function () {
             });
         });
 
+        it('prints log events with string data', function (done) {
+
+            var reporter = new GoodConsole({ log: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                expect(value).to.equal(timeString + ', info, this is a log');
+                done();
+            };
+
+            internals.request.timestamp = now;
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'log', {
+                    timestamp: now,
+                    tags: ['info'],
+                    data: 'this is a log'
+                });
+            });
+        });
+
+        it('prints log events with object data', function (done) {
+
+            var reporter = new GoodConsole({ log: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var ee = new EventEmitter();
+
+            console.log = function (value) {
+
+                console.info(value);
+
+                expect(value).to.equal(timeString + ', info,high, {"message":"this is a log"}');
+                done();
+            };
+
+            internals.request.timestamp = now;
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'log', {
+                    timestamp: now,
+                    tags: ['info', 'high'],
+                    data: {
+                        message: 'this is a log'
+                    }
+                });
+            });
+        });
+
         it('formats the timestamp based on the supplied option', function (done) {
 
             var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY'});
