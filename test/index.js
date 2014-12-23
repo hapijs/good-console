@@ -109,8 +109,6 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    console.info(value);
-
                     expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
