@@ -109,7 +109,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
@@ -135,7 +135,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
@@ -160,7 +160,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
                     done();
                 };
 
@@ -183,7 +183,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', response, localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
@@ -207,7 +207,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', response, localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
                     done();
                 };
 
@@ -239,7 +239,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    var expected = Util.format('%s, response, localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
+                    var expected = Util.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
                     expect(value).to.equal(expected);
                     counter++;
 
@@ -275,7 +275,7 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                expect(value).to.equal(timeString + ', ops, memory: 29Mb, uptime (seconds): 6, load: 1.650390625,1.6162109375,1.65234375');
+                expect(value).to.equal(timeString + ', [ops], memory: 29Mb, uptime (seconds): 6, load: 1.650390625,1.6162109375,1.65234375');
                 done();
             };
 
@@ -304,7 +304,7 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                expect(value).to.equal(timeString + ', internalError, message: test message stack: fake stack for testing');
+                expect(value).to.equal(timeString + ', [error], message: test message stack: fake stack for testing');
                 done();
             };
 
@@ -326,7 +326,7 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                expect(value).to.equal(timeString + ', request,user,info, data: you made a request');
+                expect(value).to.equal(timeString + ', [request,user,info], data: you made a request');
                 done();
             };
 
@@ -348,7 +348,7 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                expect(value).to.equal(timeString + ', request,user,info, data: {"message":"you made a request to a resource"}');
+                expect(value).to.equal(timeString + ', [request,user,info], data: {"message":"you made a request to a resource"}');
                 done();
             };
 
@@ -396,7 +396,7 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                expect(value).to.equal(timeString + ', info, this is a log');
+                expect(value).to.equal(timeString + ', [log,info], data: this is a log');
                 done();
             };
 
@@ -424,7 +424,7 @@ describe('GoodConsole', function () {
 
                 console.info(value);
 
-                expect(value).to.equal(timeString + ', info,high, {"message":"this is a log"}');
+                expect(value).to.equal(timeString + ', [log,info,high], data: {"message":"this is a log"}');
                 done();
             };
 
