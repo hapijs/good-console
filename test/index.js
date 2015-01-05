@@ -389,9 +389,9 @@ describe('GoodConsole', function () {
 
         it('prints log events with string data', function (done) {
 
-            var reporter = new GoodConsole({ log: '*' });
+            var reporter = new GoodConsole({ log: '*' }, { format: 'DD-YY -- ZZ', utc: false });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format('DD-YY -- ZZ');
             var ee = new EventEmitter();
 
             console.log = function (value) {
@@ -422,8 +422,6 @@ describe('GoodConsole', function () {
 
             console.log = function (value) {
 
-                console.info(value);
-
                 expect(value).to.equal(timeString + ', [log,info,high], data: {"message":"this is a log"}');
                 done();
             };
@@ -448,6 +446,36 @@ describe('GoodConsole', function () {
             var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY'});
             var now = Date.now();
             var timeString = Moment.utc(now).format('YYYY');
+            var event = {
+                event: 'test',
+                data: {
+                    reason: 'for testing'
+                },
+                tags: ['user']
+            };
+            var ee = new EventEmitter();
+
+            console.log = function (value, event, time) {
+
+                var result = Util.format(value, event, time);
+
+                expect(result).to.equal('Unknown event "test" occurred with timestamp ' + timeString + '.');
+                done();
+            };
+            event.timestamp = now;
+
+            reporter.start(ee, function (err) {
+
+                expect(err).to.not.exist();
+                ee.emit('report', 'test', event);
+            });
+        });
+
+        it('formats the timestamp based on the supplied option non-utc mode', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ', utc: false });
+            var now = Date.now();
+            var timeString = Moment(now).format('YYYY - ZZ');
             var event = {
                 event: 'test',
                 data: {
