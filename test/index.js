@@ -160,7 +160,65 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms)');
+                    done();
+                };
+
+                event.timestamp = now;
+
+                reporter.start(ee, function (err) {
+
+                    expect(err).to.not.exist();
+                    ee.emit('report', 'response', event);
+                });
+            });
+
+            it('logs to the console for "response" events with a requestPayload', function (done) {
+
+                var reporter = new GoodConsole({ response: '*' });
+                var now = Date.now();
+                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var event = Hoek.clone(internals.response);
+                var ee = new EventEmitter();
+
+                delete event.responsePayload;
+
+                event.requestPayload = {
+                    scotch: 'nordic selection'
+                };
+
+                console.log = function (value) {
+
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) request payload: {"scotch":"nordic selection"}');
+                    done();
+                };
+
+                event.timestamp = now;
+
+                reporter.start(ee, function (err) {
+
+                    expect(err).to.not.exist();
+                    ee.emit('report', 'response', event);
+                });
+            });
+
+            it('logs to the console for "response" events with headers', function (done) {
+
+                var reporter = new GoodConsole({ response: '*' });
+                var now = Date.now();
+                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var event = Hoek.clone(internals.response);
+                var ee = new EventEmitter();
+
+                delete event.responsePayload;
+
+                event.headers = {
+                    'Content-Type': 'liquid'
+                };
+
+                console.log = function (value) {
+
+                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) headers: {"Content-Type":"liquid"}');
                     done();
                 };
 
@@ -239,7 +297,7 @@ describe('GoodConsole', function () {
 
                 console.log = function (value) {
 
-                    var expected = Util.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
+                    var expected = Util.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms)', timeString, colors[counter], counter * 100);
                     expect(value).to.equal(expected);
                     counter++;
 
