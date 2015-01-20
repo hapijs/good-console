@@ -1,10 +1,11 @@
 // Load modules
-var EventEmitter = require('events').EventEmitter;
-var Util = require('util');
+var Stream = require('stream');
+
 var Code = require('code');
 var Hoek = require('hoek');
 var Lab = require('lab');
 var Moment = require('moment');
+var StandIn = require('stand-in');
 var GoodConsole = require('..');
 
 
@@ -62,6 +63,18 @@ internals.request = {
     path: '/'
 };
 
+internals.readStream = function (done) {
+
+    var result = new Stream.Readable({ objectMode: true });
+    result._read = Hoek.ignore;
+
+    if (typeof done === 'function') {
+        result.once('end', done);
+    }
+
+    return result;
+};
+
 // Test shortcuts
 
 var lab = exports.lab = Lab.script();
@@ -73,27 +86,35 @@ var it = lab.it;
 
 describe('GoodConsole', function () {
 
-    var log;
+    it('returns a new object without "new"', function (done) {
 
-    before(function (done) {
+        var reporter = GoodConsole();
+        expect(reporter._settings).to.exist();
 
-        log = console.log;
         done();
     });
 
-    after(function (done) {
+    it('returns a new object with "new"', function (done) {
 
-        console.log = log;
+        var reporter = new GoodConsole();
+        expect(reporter._settings).to.exist();
+
         done();
     });
 
-    it('throw an error is not constructed with new', function (done) {
+    it('throws an error if the incomming stream is not in objectMode', function (done) {
 
-        expect(function () {
+        var reporter = GoodConsole();
+        expect(reporter._settings).to.exist();
 
-            var reporter = GoodConsole();
-        }).to.throw('GoodConsole must be created with new');
-        done();
+        var stream = new Stream.Readable();
+
+        reporter.start(stream, null, function (err) {
+
+            expect(err).to.exist();
+            expect(err.message).to.equal('stream must be in objectMode');
+            done();
+        });
     });
 
     describe('_report()', function () {
@@ -102,24 +123,31 @@ describe('GoodConsole', function () {
 
             it('logs to the console for "response" events', function (done) {
 
-                var reporter = new GoodConsole({ response: '*' });
+                var reporter = GoodConsole({ response: '*' });
                 var now = Date.now();
                 var timeString = Moment.utc(now).format(internals.defaults.format);
-                var ee = new EventEmitter();
 
-                console.log = function (value) {
+                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
-                    done();
-                };
+                    if (string.indexOf(timeString) === 0) {
+                        stand.restore();
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    }
+                    else {
+                        stand.original(string, enc, callback);
+                    }
+                });
 
                 internals.response.timestamp = now;
 
-                reporter.start(ee, function (err) {
+                var s = internals.readStream(done);
+
+                reporter.start(s, null, function (err) {
 
                     expect(err).to.not.exist();
 
-                    ee.emit('report', 'response', internals.response);
+                    s.push(internals.response);
+                    s.push(null);
                 });
             });
 
@@ -129,22 +157,29 @@ describe('GoodConsole', function () {
                 var now = Date.now();
                 var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
-                var ee = new EventEmitter();
 
                 delete event.query;
 
-                console.log = function (value) {
+                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
-                    done();
-                };
+                    if (string.indexOf(timeString) === 0) {
+                        stand.restore();
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    }
+                    else {
+                        stand.original(string, enc, callback);
+                    }
+                });
 
                 event.timestamp = now;
 
-                reporter.start(ee, function (err) {
+                var s = internals.readStream(done);
+
+                reporter.start(s, null, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'response', event);
+                    s.push(event);
+                    s.push(null);
                 });
             });
 
@@ -154,22 +189,29 @@ describe('GoodConsole', function () {
                 var now = Date.now();
                 var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
-                var ee = new EventEmitter();
 
                 delete event.responsePayload;
 
-                console.log = function (value) {
+                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
-                    done();
-                };
+                    if (string.indexOf(timeString) === 0) {
+                        stand.restore();
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
+                    }
+                    else {
+                        stand.original(string, enc, callback);
+                    }
+                });
 
                 event.timestamp = now;
 
-                reporter.start(ee, function (err) {
+                var s = internals.readStream(done);
+
+                reporter.start(s, null, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'response', event);
+                    s.push(event);
+                    s.push(null);
                 });
             });
 
@@ -179,21 +221,28 @@ describe('GoodConsole', function () {
                 var now = Date.now();
                 var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
-                var ee = new EventEmitter();
 
-                console.log = function (value) {
+                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                    expect(value).to.equal(timeString + ', [response], localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
-                    done();
-                };
+                    if (string.indexOf(timeString) === 0) {
+                        stand.restore();
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                    }
+                    else {
+                        stand.original(string, enc, callback);
+                    }
+                });
 
                 event.timestamp = now;
                 event.method = 'head';
 
-                reporter.start(ee, function (err) {
+                var s = internals.readStream(done);
+
+                reporter.start(s, null, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'response', event);
+                    s.push(event);
+                    s.push(null);
                 });
             });
 
@@ -203,21 +252,28 @@ describe('GoodConsole', function () {
                 var now = Date.now();
                 var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
-                var ee = new EventEmitter();
 
-                console.log = function (value) {
+                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                    expect(value).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
-                    done();
-                };
+                    if (string.indexOf(timeString) === 0) {
+                        stand.restore();
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
+                    }
+                    else {
+                        stand.original(string, enc, callback);
+                    }
+                });
 
                 event.timestamp = now;
                 delete event.statusCode;
 
-                reporter.start(ee, function (err) {
+                var s = internals.readStream(done);
+
+                reporter.start(s, null, function (err) {
 
                     expect(err).to.not.exist();
-                    ee.emit('report', 'response', event);
+                    s.push(event);
+                    s.push(null);
                 });
 
             });
@@ -235,19 +291,28 @@ describe('GoodConsole', function () {
                     4: 33,
                     5: 31
                 };
-                var ee = new EventEmitter();
 
-                console.log = function (value) {
+                var write = StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                    var expected = Util.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
-                    expect(value).to.equal(expected);
-                    counter++;
+                    if (string.indexOf(timeString) === 0) {
 
-                    if (counter === 5) { done(); }
-                };
+                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
+                        expect(string).to.equal(expected);
 
+                        counter++;
+                    }
+                    else {
+                        stand.original(string, enc, callback);
+                    }
+                });
 
-                reporter.start(ee, function (err) {
+                var s = internals.readStream(function () {
+
+                    write.restore();
+                    done();
+                });
+
+                reporter.start(s, null, function (err) {
 
                     expect(err).to.not.exist();
 
@@ -259,8 +324,9 @@ describe('GoodConsole', function () {
                         delete event.query;
                         delete event.responsePayload;
 
-                        ee.emit('report', 'response', event);
+                        s.push(event);
                     }
+                    s.push(null);
                 });
             });
         });
@@ -271,20 +337,27 @@ describe('GoodConsole', function () {
             var now = Date.now();
             var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = Hoek.clone(internals.ops);
-            var ee = new EventEmitter();
 
-            console.log = function (value) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                expect(value).to.equal(timeString + ', [ops], memory: 29Mb, uptime (seconds): 6, load: 1.650390625,1.6162109375,1.65234375');
-                done();
-            };
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [ops], memory: 29Mb, uptime (seconds): 6, load: 1.650390625,1.6162109375,1.65234375');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
             event.timestamp = now;
 
-            reporter.start(ee, function (err) {
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'ops', event);
+                s.push(event);
+                s.push(null);
             });
         });
 
@@ -300,20 +373,27 @@ describe('GoodConsole', function () {
                     stack: 'fake stack for testing'
                 }
             };
-            var ee = new EventEmitter();
 
-            console.log = function (value) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                expect(value).to.equal(timeString + ', [error], message: test message stack: fake stack for testing');
-                done();
-            };
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [error], message: test message stack: fake stack for testing');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
             event.timestamp = now;
 
-            reporter.start(ee, function (err) {
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'error', event);
+                s.push(event);
+                s.push(null);
             });
         });
 
@@ -322,20 +402,27 @@ describe('GoodConsole', function () {
             var reporter = new GoodConsole({ request: '*' });
             var now = Date.now();
             var timeString = Moment.utc(now).format(internals.defaults.format);
-            var ee = new EventEmitter();
 
-            console.log = function (value) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                expect(value).to.equal(timeString + ', [request,user,info], data: you made a request');
-                done();
-            };
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [request,user,info], data: you made a request');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
             internals.request.timestamp = now;
 
-            reporter.start(ee, function (err) {
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'request', internals.request);
+                s.push(internals.request);
+                s.push(null);
             });
         });
 
@@ -344,46 +431,128 @@ describe('GoodConsole', function () {
             var reporter = new GoodConsole({ request: '*' });
             var now = Date.now();
             var timeString = Moment.utc(now).format(internals.defaults.format);
-            var ee = new EventEmitter();
 
-            console.log = function (value) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                expect(value).to.equal(timeString + ', [request,user,info], data: {"message":"you made a request to a resource"}');
-                done();
-            };
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [request,user,info], data: {"message":"you made a request to a resource"}');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
             internals.request.timestamp = now;
             internals.request.data = { message: 'you made a request to a resource' };
 
-            reporter.start(ee, function (err) {
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'request', internals.request);
+                s.push(internals.request);
+                s.push(null);
             });
         });
 
-        it('prints a warning message for unknown event types', function (done) {
+        it('prints a generic message for unknown event types with "data" as an object', function (done) {
 
             var reporter = new GoodConsole({ test: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 data: {
                     reason: 'for testing'
                 },
-                tags: ['user']
-            };
-            var ee = new EventEmitter();
-
-            console.log = function (value) {
-
-                expect(value).to.equal('Unknown event "%s" occurred with timestamp %s.');
-                done();
+                tags: ['user'],
+                timestamp: now
             };
 
-            reporter.start(ee, function (err) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
+
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'test', event);
+                s.push(event);
+                s.push(null);
+            });
+        });
+
+        it('prints a generic message for unknown event types with "data" as a string', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var event = {
+                event: 'test',
+                data: 'for testing',
+                tags: ['user'],
+                timestamp: now
+            };
+
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [test,user], data: for testing');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
+
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
+
+                expect(err).to.not.exist();
+                s.push(event);
+                s.push(null);
+            });
+        });
+
+        it('prints a generic message for unknown event types with no "data" attribute', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' });
+            var now = Date.now();
+            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var event = {
+                event: 'test',
+                tags: ['user'],
+                timestamp: now
+            };
+
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [test,user], data: (none)');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
+
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
+
+                expect(err).to.not.exist();
+                s.push(event);
+                s.push(null);
             });
         });
 
@@ -392,24 +561,30 @@ describe('GoodConsole', function () {
             var reporter = new GoodConsole({ log: '*' }, { format: 'DD-YY -- ZZ', utc: false });
             var now = Date.now();
             var timeString = Moment(now).format('DD-YY -- ZZ');
-            var ee = new EventEmitter();
 
-            console.log = function (value) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                expect(value).to.equal(timeString + ', [log,info], data: this is a log');
-                done();
-            };
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [log,info], data: this is a log');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
-            internals.request.timestamp = now;
+            var s = internals.readStream(done);
 
-            reporter.start(ee, function (err) {
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'log', {
+                s.push({
+                    event: 'log',
                     timestamp: now,
                     tags: ['info'],
                     data: 'this is a log'
                 });
+                s.push(null);
             });
         });
 
@@ -418,26 +593,34 @@ describe('GoodConsole', function () {
             var reporter = new GoodConsole({ log: '*' });
             var now = Date.now();
             var timeString = Moment.utc(now).format(internals.defaults.format);
-            var ee = new EventEmitter();
 
-            console.log = function (value) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                expect(value).to.equal(timeString + ', [log,info,high], data: {"message":"this is a log"}');
-                done();
-            };
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [log,info,high], data: {"message":"this is a log"}');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
             internals.request.timestamp = now;
 
-            reporter.start(ee, function (err) {
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'log', {
+                s.push({
+                    event: 'log',
                     timestamp: now,
                     tags: ['info', 'high'],
                     data: {
                         message: 'this is a log'
                     }
                 });
+                s.push(null);
             });
         });
 
@@ -451,23 +634,28 @@ describe('GoodConsole', function () {
                 data: {
                     reason: 'for testing'
                 },
-                tags: ['user']
+                tags: ['user'],
+                timestamp: now
             };
-            var ee = new EventEmitter();
 
-            console.log = function (value, event, time) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                var result = Util.format(value, event, time);
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
-                expect(result).to.equal('Unknown event "test" occurred with timestamp ' + timeString + '.');
-                done();
-            };
-            event.timestamp = now;
+            var s = internals.readStream(done);
 
-            reporter.start(ee, function (err) {
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'test', event);
+                s.push(event);
+                s.push(null);
             });
         });
 
@@ -481,23 +669,60 @@ describe('GoodConsole', function () {
                 data: {
                     reason: 'for testing'
                 },
-                tags: ['user']
+                tags: ['user'],
+                timestamp: now
             };
-            var ee = new EventEmitter();
 
-            console.log = function (value, event, time) {
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
-                var result = Util.format(value, event, time);
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
 
-                expect(result).to.equal('Unknown event "test" occurred with timestamp ' + timeString + '.');
-                done();
-            };
-            event.timestamp = now;
+            var s = internals.readStream(done);
 
-            reporter.start(ee, function (err) {
+            reporter.start(s, null, function (err) {
 
                 expect(err).to.not.exist();
-                ee.emit('report', 'test', event);
+                s.push(event);
+                s.push(null);
+            });
+        });
+
+        it('uses the current time if the event does not have a timestamp property', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' });
+            var event = {
+                event: 'test',
+                data: {
+                    reason: 'for testing'
+                },
+                tags: ['user', '!!!']
+            };
+
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                if (string.indexOf('!!!') >= 0) {
+                    stand.restore();
+                    expect(/\[test,user,!!!], data: {"reason":"for testing"}/.test(string)).to.be.true();
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
+
+            var s = internals.readStream(done);
+
+            reporter.start(s, null, function (err) {
+
+                expect(err).to.not.exist();
+                s.push(event);
+                s.push(null);
             });
         });
     });

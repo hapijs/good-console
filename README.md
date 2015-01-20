@@ -8,11 +8,10 @@ Lead Maintainer: [Adam Bretz](https://github.com/arb)
 
 ## Usage
 
-`good-console` is a [good-reporter](https://github.com/hapijs/good-reporter) implementation to write [hapi](http://hapijs.com/) server events to the console.
+`good-console` is a [good](https://github.com/hapijs/good) reporter implementation to write [hapi](http://hapijs.com/) server events to the console.
 
-## Good Console
-### new GoodConsole(events, [options])
-creates a new GoodFile object with the following arguments
+## `GoodConsole(events, [options])`
+Creates a new GoodConsole object with the following arguments:
 
 - `events` - an object of key value pairs.
 	- `key` - one of the supported [good events](https://github.com/hapijs/good) indicating the hapi event to subscribe to
@@ -21,7 +20,15 @@ creates a new GoodFile object with the following arguments
 	- `format` - [MomentJS](http://momentjs.com/docs/#/displaying/format/) format string. Defaults to 'YYMMDD/HHmmss.SSS'.
 	- `utc` - boolean controlling Moment using [utc mode](http://momentjs.com/docs/#/parsing/utc/) or not. Defaults to `true`.
 
-### Output Formats
+## Good Console Methods
+### `goodconsole.start(stream, emitter, callback)`
+Starts the reports with the following arguments:
+
+- `stream` - a Node readable stream that will be the source of data for this reporter. It is assumed that `stream` is in `objectMode`.
+- `emitter` - an event emitter object.
+- `callback` - a callback to execute when the start function has complete all the necessary set up steps.
+
+## Output Formats
 
 Below are example outputs for the designated event type:
 
