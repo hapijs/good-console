@@ -112,7 +112,7 @@ describe('GoodConsole', function () {
         reporter.start(stream, null, function (err) {
 
             expect(err).to.exist();
-            expect(err.message).to.equal('stream must be in objectMode');
+            expect(err.message).to.equal('stream must be in object mode');
             done();
         });
     });
