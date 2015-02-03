@@ -88,7 +88,7 @@ describe('GoodConsole', function () {
 
     it('returns a new object without "new"', function (done) {
 
-        var reporter = GoodConsole();
+        var reporter = GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
 
         done();
@@ -96,7 +96,7 @@ describe('GoodConsole', function () {
 
     it('returns a new object with "new"', function (done) {
 
-        var reporter = new GoodConsole();
+        var reporter = new GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
 
         done();
@@ -104,7 +104,7 @@ describe('GoodConsole', function () {
 
     it('throws an error if the incomming stream is not in objectMode', function (done) {
 
-        var reporter = GoodConsole();
+        var reporter = GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
 
         var stream = new Stream.Readable();
