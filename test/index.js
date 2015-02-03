@@ -531,7 +531,7 @@ describe('GoodConsole', function () {
             var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
-                tags: ['user'],
+                tags: 'user',
                 timestamp: now
             };
 
