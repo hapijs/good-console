@@ -109,7 +109,7 @@ describe('GoodConsole', function () {
 
         var stream = new Stream.Readable();
 
-        reporter.start(stream, null, function (err) {
+        reporter.init(stream, null, function (err) {
 
             expect(err).to.exist();
             expect(err.message).to.equal('stream must be in object mode');
@@ -142,7 +142,7 @@ describe('GoodConsole', function () {
 
                 var s = internals.readStream(done);
 
-                reporter.start(s, null, function (err) {
+                reporter.init(s, null, function (err) {
 
                     expect(err).to.not.exist();
 
@@ -175,7 +175,7 @@ describe('GoodConsole', function () {
 
                 var s = internals.readStream(done);
 
-                reporter.start(s, null, function (err) {
+                reporter.init(s, null, function (err) {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -207,7 +207,7 @@ describe('GoodConsole', function () {
 
                 var s = internals.readStream(done);
 
-                reporter.start(s, null, function (err) {
+                reporter.init(s, null, function (err) {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -238,7 +238,7 @@ describe('GoodConsole', function () {
 
                 var s = internals.readStream(done);
 
-                reporter.start(s, null, function (err) {
+                reporter.init(s, null, function (err) {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -269,7 +269,7 @@ describe('GoodConsole', function () {
 
                 var s = internals.readStream(done);
 
-                reporter.start(s, null, function (err) {
+                reporter.init(s, null, function (err) {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -312,7 +312,7 @@ describe('GoodConsole', function () {
                     done();
                 });
 
-                reporter.start(s, null, function (err) {
+                reporter.init(s, null, function (err) {
 
                     expect(err).to.not.exist();
 
@@ -353,7 +353,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -389,7 +389,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -418,7 +418,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(internals.request);
@@ -448,7 +448,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(internals.request);
@@ -483,7 +483,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -516,7 +516,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -548,7 +548,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -575,7 +575,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push({
@@ -609,7 +609,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push({
@@ -651,7 +651,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -686,7 +686,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -718,7 +718,7 @@ describe('GoodConsole', function () {
 
             var s = internals.readStream(done);
 
-            reporter.start(s, null, function (err) {
+            reporter.init(s, null, function (err) {
 
                 expect(err).to.not.exist();
                 s.push(event);

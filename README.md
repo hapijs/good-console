@@ -21,12 +21,12 @@ Creates a new GoodConsole object with the following arguments:
 	- `utc` - boolean controlling Moment using [utc mode](http://momentjs.com/docs/#/parsing/utc/) or not. Defaults to `true`.
 
 ## Good Console Methods
-### `goodconsole.start(stream, emitter, callback)`
-Starts the reports with the following arguments:
+### `goodconsole.init(stream, emitter, callback)`
+Initializes the reporter with the following arguments:
 
 - `stream` - a Node readable stream that will be the source of data for this reporter. It is assumed that `stream` is in `objectMode`.
 - `emitter` - an event emitter object.
-- `callback` - a callback to execute when the start function has complete all the necessary set up steps.
+- `callback` - a callback to execute when the start function has complete all the necessary set up steps and is ready to receive data.
 
 ## Output Formats
 
