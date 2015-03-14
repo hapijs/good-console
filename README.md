@@ -19,6 +19,8 @@ Creates a new GoodConsole object with the following arguments:
 - `[options]` - optional object with the following available keys
 	- `format` - [MomentJS](http://momentjs.com/docs/#/displaying/format/) format string. Defaults to 'YYMMDD/HHmmss.SSS'.
 	- `utc` - boolean controlling Moment using [utc mode](http://momentjs.com/docs/#/parsing/utc/) or not. Defaults to `true`.
+	- `logHeaderPayloadWhenProvided` - boolean controlling whether header data is logged as part of GreatResponse events emitted by Good. Good [header option](https://github.com/hapijs/good#greatresponserequest-options) must also be enabled to forward header data to Good-Console. Defaults to `false`.
+	- `logRequestPayloadWhenProvided` - boolean controlling whether request data is logged as part of GreatResponse events emitted by Good. Good [requestPayload option](https://github.com/hapijs/good#greatresponserequest-options) must also be enabled to forward request payload data to Good-Console. Defaults to `false`.
 
 ## Good Console Methods
 ### `goodconsole.init(stream, emitter, callback)`

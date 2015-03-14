@@ -13,7 +13,9 @@ var GoodConsole = require('..');
 
 var internals = {
     defaults: {
-        format: 'YYMMDD/HHmmss.SSS'
+        format: 'YYMMDD/HHmmss.SSS',
+        logHeaderPayloadWhenProvided: false,
+        logRequestPayloadWhenProvided: false
     }
 };
 internals.ops = {
@@ -131,7 +133,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response_payload:{"foo":"bar","value":1}');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -164,7 +166,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data [32m200[0m (150ms) response_payload:{"foo":"bar","value":1}');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -196,7 +198,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms)');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -226,7 +228,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response_payload:{"foo":"bar","value":1}');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -257,7 +259,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} (150ms) response_payload:{"foo":"bar","value":1}');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -296,7 +298,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
 
-                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
+                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data [%sm%s[0m (150ms)', timeString, colors[counter], counter * 100);
                         expect(string).to.equal(expected);
 
                         counter++;
@@ -724,6 +726,178 @@ describe('GoodConsole', function () {
                 s.push(event);
                 s.push(null);
             });
+        });
+
+        it('logs to the console for "response" events with a requestPayload but option logRequestPayloadWhenProvided disabled', function (done) {
+
+          var reporter = new GoodConsole({ response: '*' });
+          var now = Date.now();
+          var timeString = Moment.utc(now).format(internals.defaults.format);
+          var event = Hoek.clone(internals.response);
+
+          event.requestPayload = {user: "name", pass: "word"};
+
+          expect(reporter._settings.logRequestPayloadWhenProvided).to.equal(false);
+
+          StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+            if (string.indexOf(timeString) === 0) {
+              stand.restore();
+              expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response_payload:{\"foo\":\"bar\",\"value\":1}');
+            }
+            else {
+              stand.original(string, enc, callback);
+            }
+          });
+
+          event.timestamp = now;
+
+          var s = internals.readStream(done);
+
+          reporter.init(s, null, function (err) {
+
+            expect(err).to.not.exist();
+            s.push(event);
+            s.push(null);
+          });
+        });
+
+        it('logs to the console for "response" events with a requestPayload with option logRequestPayloadWhenProvided enabled', function (done) {
+
+          var reporter = new GoodConsole({ response: '*' }, {logRequestPayloadWhenProvided: true});
+          var now = Date.now();
+          var timeString = Moment.utc(now).format(internals.defaults.format);
+          var event = Hoek.clone(internals.response);
+
+          event.requestPayload = {user: "name", pass: "word"};
+
+          expect(reporter._settings.logRequestPayloadWhenProvided).to.equal(true);
+
+          StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+            if (string.indexOf(timeString) === 0) {
+              stand.restore();
+              expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} request_payload:{\"user\":\"name\",\"pass\":\"word\"} [32m200[0m (150ms) response_payload:{\"foo\":\"bar\",\"value\":1}');
+            }
+            else {
+              stand.original(string, enc, callback);
+            }
+          });
+
+          event.timestamp = now;
+
+          var s = internals.readStream(done);
+
+          reporter.init(s, null, function (err) {
+
+            expect(err).to.not.exist();
+            s.push(event);
+            s.push(null);
+          });
+        });
+
+        it('logs to the console for "response" events with headers but option logHeaderPayloadWhenProvided disabled', function (done) {
+
+          var reporter = new GoodConsole({ response: '*' });
+          var now = Date.now();
+          var timeString = Moment.utc(now).format(internals.defaults.format);
+          var event = Hoek.clone(internals.response);
+
+          event.headers = {Accept: "nothing"};
+
+          expect(reporter._settings.logHeaderPayloadWhenProvided).to.equal(false);
+
+          StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+            if (string.indexOf(timeString) === 0) {
+              stand.restore();
+              expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response_payload:{\"foo\":\"bar\",\"value\":1}');
+            }
+            else {
+              stand.original(string, enc, callback);
+            }
+          });
+
+          event.timestamp = now;
+
+          var s = internals.readStream(done);
+
+          reporter.init(s, null, function (err) {
+
+            expect(err).to.not.exist();
+            s.push(event);
+            s.push(null);
+          });
+        });
+
+        it('logs to the console for "response" events with headers with option logHeaderPayloadWhenProvided enabled', function (done) {
+
+          var reporter = new GoodConsole({ response: '*' }, {logHeaderPayloadWhenProvided: true});
+          var now = Date.now();
+          var timeString = Moment.utc(now).format(internals.defaults.format);
+          var event = Hoek.clone(internals.response);
+
+          event.headers = {Accept: "nothing"};
+
+          expect(reporter._settings.logHeaderPayloadWhenProvided).to.equal(true);
+
+          StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+            if (string.indexOf(timeString) === 0) {
+              stand.restore();
+              expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) headers:{\"Accept\":\"nothing\"} response_payload:{\"foo\":\"bar\",\"value\":1}');
+            }
+            else {
+              stand.original(string, enc, callback);
+            }
+          });
+
+          event.timestamp = now;
+
+          var s = internals.readStream(done);
+
+          reporter.init(s, null, function (err) {
+
+            expect(err).to.not.exist();
+            s.push(event);
+            s.push(null);
+          });
+        });
+
+        it('logs to the console for "response" events with headers and a requestPayload and with both options logHeaderPayloadWhenProvided and logRequestPayloadWhenProvided enabled', function (done) {
+
+          var reporter = new GoodConsole({ response: '*' }, {logHeaderPayloadWhenProvided: true, logRequestPayloadWhenProvided: true});
+          var now = Date.now();
+          var timeString = Moment.utc(now).format(internals.defaults.format);
+          var event = Hoek.clone(internals.response);
+
+          event.headers = {Accept: "nothing"};
+          event.requestPayload = {user: "name", pass: "word"};
+
+          expect(reporter._settings.logHeaderPayloadWhenProvided).to.equal(true);
+          expect(reporter._settings.logRequestPayloadWhenProvided).to.equal(true);
+
+          StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+            if (string.indexOf(timeString) === 0) {
+              stand.restore();
+              expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} request_payload:{\"user\":\"name\",\"pass\":\"word\"} [32m200[0m (150ms) headers:{\"Accept\":\"nothing\"} response_payload:{\"foo\":\"bar\",\"value\":1}');
+            }
+            else {
+              stand.original(string, enc, callback);
+            }
+          });
+
+          event.timestamp = now;
+
+          var s = internals.readStream(done);
+
+          reporter.init(s, null, function (err) {
+
+            expect(err).to.not.exist();
+            s.push(event);
+            s.push(null);
+          });
         });
     });
 });
