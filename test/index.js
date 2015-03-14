@@ -50,7 +50,7 @@ internals.response = {
         name: 'adam'
     },
     responsePayload: {
-        foo:'bar',
+        foo: 'bar',
         value: 1
     }
 };
@@ -735,7 +735,7 @@ describe('GoodConsole', function () {
           var timeString = Moment.utc(now).format(internals.defaults.format);
           var event = Hoek.clone(internals.response);
 
-          event.requestPayload = {user: "name", pass: "word"};
+          event.requestPayload = {user: 'name', pass: 'word'};
 
           expect(reporter._settings.logRequestPayloadWhenProvided).to.equal(false);
 
@@ -769,7 +769,7 @@ describe('GoodConsole', function () {
           var timeString = Moment.utc(now).format(internals.defaults.format);
           var event = Hoek.clone(internals.response);
 
-          event.requestPayload = {user: "name", pass: "word"};
+          event.requestPayload = {user: 'name', pass: 'word'};
 
           expect(reporter._settings.logRequestPayloadWhenProvided).to.equal(true);
 
@@ -803,7 +803,7 @@ describe('GoodConsole', function () {
           var timeString = Moment.utc(now).format(internals.defaults.format);
           var event = Hoek.clone(internals.response);
 
-          event.headers = {Accept: "nothing"};
+          event.headers = {Accept: 'nothing'};
 
           expect(reporter._settings.logHeaderPayloadWhenProvided).to.equal(false);
 
@@ -837,7 +837,7 @@ describe('GoodConsole', function () {
           var timeString = Moment.utc(now).format(internals.defaults.format);
           var event = Hoek.clone(internals.response);
 
-          event.headers = {Accept: "nothing"};
+          event.headers = {Accept: 'nothing'};
 
           expect(reporter._settings.logHeaderPayloadWhenProvided).to.equal(true);
 
@@ -871,8 +871,8 @@ describe('GoodConsole', function () {
           var timeString = Moment.utc(now).format(internals.defaults.format);
           var event = Hoek.clone(internals.response);
 
-          event.headers = {Accept: "nothing"};
-          event.requestPayload = {user: "name", pass: "word"};
+          event.headers = {Accept: 'nothing'};
+          event.requestPayload = {user: 'name', pass: 'word'};
 
           expect(reporter._settings.logHeaderPayloadWhenProvided).to.equal(true);
           expect(reporter._settings.logRequestPayloadWhenProvided).to.equal(true);
@@ -882,6 +882,42 @@ describe('GoodConsole', function () {
             if (string.indexOf(timeString) === 0) {
               stand.restore();
               expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} request_payload:{\"user\":\"name\",\"pass\":\"word\"} [32m200[0m (150ms) headers:{\"Accept\":\"nothing\"} response_payload:{\"foo\":\"bar\",\"value\":1}');
+            }
+            else {
+              stand.original(string, enc, callback);
+            }
+          });
+
+          event.timestamp = now;
+
+          var s = internals.readStream(done);
+
+          reporter.init(s, null, function (err) {
+
+            expect(err).to.not.exist();
+            s.push(event);
+            s.push(null);
+          });
+        });
+
+        it('logs to the console for "response" events with invalid headers and a requestPayload', function (done) {
+
+          var reporter = new GoodConsole({ response: '*' }, {logHeaderPayloadWhenProvided: true, logRequestPayloadWhenProvided: true});
+          var now = Date.now();
+          var timeString = Moment.utc(now).format(internals.defaults.format);
+          var event = Hoek.clone(internals.response);
+
+          event.headers = 'invalid';
+          event.requestPayload = 1234;  // also invalid
+
+          expect(reporter._settings.logHeaderPayloadWhenProvided).to.equal(true);
+          expect(reporter._settings.logRequestPayloadWhenProvided).to.equal(true);
+
+          StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+            if (string.indexOf(timeString) === 0) {
+              stand.restore();
+              expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response_payload:{\"foo\":\"bar\",\"value\":1}');
             }
             else {
               stand.original(string, enc, callback);
