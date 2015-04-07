@@ -131,7 +131,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}\n');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -164,7 +164,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data  [32m200[0m (150ms) response payload: {"foo":"bar","value":1}\n');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -196,7 +196,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) ');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) \n');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -226,7 +226,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;34mhead[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {"foo":"bar","value":1}\n');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -257,7 +257,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"}  (150ms) response payload: {"foo":"bar","value":1}\n');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -296,7 +296,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
 
-                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) ', timeString, colors[counter], counter * 100);
+                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) \n', timeString, colors[counter], counter * 100);
                         expect(string).to.equal(expected);
 
                         counter++;
@@ -342,7 +342,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [ops], memory: 29Mb, uptime (seconds): 6, load: 1.650390625,1.6162109375,1.65234375');
+                    expect(string).to.equal(timeString + ', [ops], memory: 29Mb, uptime (seconds): 6, load: 1.650390625,1.6162109375,1.65234375\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -378,7 +378,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [error], message: test message stack: fake stack for testing');
+                    expect(string).to.equal(timeString + ', [error], message: test message stack: fake stack for testing\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -407,7 +407,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [request,user,info], data: you made a request');
+                    expect(string).to.equal(timeString + ', [request,user,info], data: you made a request\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -436,7 +436,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [request,user,info], data: {"message":"you made a request to a resource"}');
+                    expect(string).to.equal(timeString + ', [request,user,info], data: {"message":"you made a request to a resource"}\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -474,7 +474,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}');
+                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -507,7 +507,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [test,user], data: for testing');
+                    expect(string).to.equal(timeString + ', [test,user], data: for testing\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -539,7 +539,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [test,user], data: (none)');
+                    expect(string).to.equal(timeString + ', [test,user], data: (none)\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -566,7 +566,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [log,info], data: this is a log');
+                    expect(string).to.equal(timeString + ', [log,info], data: this is a log\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -598,7 +598,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [log,info,high], data: {"message":"this is a log"}');
+                    expect(string).to.equal(timeString + ', [log,info,high], data: {"message":"this is a log"}\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -642,7 +642,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}');
+                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}\n');
                 }
                 else {
                     stand.original(string, enc, callback);
@@ -677,7 +677,7 @@ describe('GoodConsole', function () {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
-                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}');
+                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}\n');
                 }
                 else {
                     stand.original(string, enc, callback);
