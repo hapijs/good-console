@@ -48,7 +48,7 @@ internals.response = {
         name: 'adam'
     },
     responsePayload: {
-        foo:'bar',
+        foo: 'bar',
         value: 1
     }
 };
