@@ -16,7 +16,7 @@
     "through2": "0.6.x"
   },
   "peerDependencies": {
-    "good": ">= 5.x.x"
+    "good": ">= 6.x.x"
   },
   "devDependencies": {
     "code": "1.x.x",
