@@ -9,7 +9,7 @@
     "test-cov-html": "lab -r html -o coverage.html -La code"
   },
   "dependencies": {
-    "good-squeeze": "1.x.x",
+    "good-squeeze": "2.x.x",
     "hoek": "2.x.x",
     "json-stringify-safe": "5.0.x",
     "moment": "2.8.x",
