@@ -19,6 +19,9 @@ Creates a new GoodConsole object with the following arguments:
 - `[options]` - optional object with the following available keys
 	- `format` - [MomentJS](http://momentjs.com/docs/#/displaying/format/) format string. Defaults to 'YYMMDD/HHmmss.SSS'.
 	- `utc` - boolean controlling Moment using [utc mode](http://momentjs.com/docs/#/parsing/utc/) or not. Defaults to `true`.
+	- `logHeaders` - log the headers from the request if present. You have to enable `requestHeaders` in Good for this. Defaults to `false`.
+	- `logResponsePayload` - log the response payload if present. Defaults to `true`.
+	- `logRequestPayload` - log the request payload if present. You have to enable `requestPayload` in Good for this. Defaults to `false`.
 
 ## Good Console Methods
 ### `goodconsole.init(stream, emitter, callback)`
