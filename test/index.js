@@ -47,9 +47,16 @@ internals.response = {
     query: {
         name: 'adam'
     },
+    headers: {
+        'Content-Type': 'application/json'
+    },
     responsePayload: {
         foo: 'bar',
         value: 1
+    },
+    requestPayload: {
+        baz: 'qux',
+        number: 1
     }
 };
 internals.request = {
@@ -196,7 +203,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
-                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) \n');
+                        expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms)\n');
                     }
                     else {
                         stand.original(string, enc, callback);
@@ -212,6 +219,253 @@ describe('GoodConsole', function () {
                     expect(err).to.not.exist();
                     s.push(event);
                     s.push(null);
+                });
+            });
+
+            describe('logHeaders, logRequestPayload, logResponsePayload', function (){
+
+                it('logs to the console for "response" events with responsePayload if logResponsePayload is true', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logResponsePayload: true });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {\"foo\":\"bar\",\"value\":1}\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
+                });
+
+                it('logs to the console for "response" events with requestPayload if logRequestPayload is true', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logRequestPayload: true });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) request payload: {\"baz\":\"qux\",\"number\":1} response payload: {\"foo\":\"bar\",\"value\":1}\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
+                });
+
+                it('logs to the console for "response" events with headers if logHeaders is true', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logHeaders: true });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) headers: {\"Content-Type\":\"application/json\"} response payload: {\"foo\":\"bar\",\"value\":1}\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
+                });
+
+                it('logs to the console for "response" events without responsePayload if logResponePayload is false', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logResponsePayload: false });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms)\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
+                });
+
+                it('logs to the console for "response" events without requestPayload if logRequestPayload is false', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logRequestPayload: false });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {\"foo\":\"bar\",\"value\":1}\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
+                });
+
+                it('logs to the console for "response" events without headers if logHeaders is false', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logHeaders: false });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {\"foo\":\"bar\",\"value\":1}\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
+                });
+
+                it('logs to the console for "response" events without headers if logHeaders is true but headers is not present', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logHeaders: true });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    delete event.headers;
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {\"foo\":\"bar\",\"value\":1}\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
+                });
+
+                it('logs to the console for "response" events without requestPayload if logRequestPayload is true but requestPAyload is not present', function (done) {
+
+                    var reporter = new GoodConsole({ response: '*' }, { logRequestPayload: true });
+                    var now = Date.now();
+                    var timeString = Moment.utc(now).format(internals.defaults.format);
+                    var event = Hoek.clone(internals.response);
+
+                    delete event.requestPayload;
+
+                    StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                        if (string.indexOf(timeString) === 0) {
+                            stand.restore();
+                            expect(string).to.equal(timeString + ', [response], localhost: [1;33mpost[0m /data {"name":"adam"} [32m200[0m (150ms) response payload: {\"foo\":\"bar\",\"value\":1}\n');
+                        }
+                        else {
+                            stand.original(string, enc, callback);
+                        }
+                    });
+
+                    event.timestamp = now;
+
+                    var s = internals.readStream(done);
+
+                    reporter.init(s, null, function (err) {
+
+                        expect(err).to.not.exist();
+                        s.push(event);
+                        s.push(null);
+                    });
                 });
             });
 
@@ -296,7 +550,7 @@ describe('GoodConsole', function () {
 
                     if (string.indexOf(timeString) === 0) {
 
-                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) \n', timeString, colors[counter], counter * 100);
+                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms)\n', timeString, colors[counter], counter * 100);
                         expect(string).to.equal(expected);
 
                         counter++;
