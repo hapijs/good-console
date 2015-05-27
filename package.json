@@ -3,7 +3,7 @@
   "version": "5.0.0",
   "repository": "git://github.com/hapijs/good-console",
   "description": "Console broadcasting for Good process monitor",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "lab -t 100 -vLa code",
     "test-cov-html": "lab -r html -o coverage.html -La code"
@@ -26,10 +26,5 @@
   "engines": {
     "node": ">=0.10.x"
   },
-  "licenses": [
-    {
-      "type": "BSD",
-      "url": "http://github.com/hapijs/good-console/raw/master/LICENSE"
-    }
-  ]
+  "license": "BSD-3-Clause"
 }
