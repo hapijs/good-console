@@ -10,7 +10,7 @@ Lead Maintainer: [Adam Bretz](https://github.com/arb)
 
 `good-console` is a [good](https://github.com/hapijs/good) reporter implementation to write [hapi](http://hapijs.com/) server events to the console.
 
-## `GoodConsole(events, [options])`
+## `GoodConsole(events, [config])`
 Creates a new GoodConsole object with the following arguments:
 
 - `events` - an object of key value pairs.
