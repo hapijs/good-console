@@ -20,7 +20,7 @@ internals.ops = {
     event: 'ops',
     timestamp: 1411583264547,
     os: {
-        load: [ 1.650390625, 1.6162109375, 1.65234375 ],
+        load: [1.650390625, 1.6162109375, 1.65234375],
         mem: { total: 17179869184, free: 8190681088 },
         uptime: 704891
     },
@@ -125,7 +125,7 @@ describe('GoodConsole', function () {
 
                 var reporter = GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var timeString = Moment(now).format(internals.defaults.format);
 
                 StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -155,7 +155,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var timeString = Moment(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 delete event.query;
@@ -187,7 +187,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var timeString = Moment(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 delete event.responsePayload;
@@ -219,7 +219,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var timeString = Moment(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
@@ -250,7 +250,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var timeString = Moment(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
@@ -283,7 +283,7 @@ describe('GoodConsole', function () {
                 var counter = 1;
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment.utc(now).format(internals.defaults.format);
+                var timeString = Moment(now).format(internals.defaults.format);
                 var colors = {
                     1: 32,
                     2: 32,
@@ -335,7 +335,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ ops: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
             var event = Hoek.clone(internals.ops);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
@@ -365,7 +365,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ error: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
             var event = {
                 event: 'error',
                 error: {
@@ -401,7 +401,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ request: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -430,7 +430,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ request: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -460,7 +460,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 data: {
@@ -495,7 +495,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 data: 'for testing',
@@ -528,7 +528,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 tags: 'user',
@@ -592,7 +592,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ log: '*' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format(internals.defaults.format);
+            var timeString = Moment(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -626,9 +626,9 @@ describe('GoodConsole', function () {
 
         it('formats the timestamp based on the supplied option', function (done) {
 
-            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY'});
+            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY' });
             var now = Date.now();
-            var timeString = Moment.utc(now).format('YYYY');
+            var timeString = Moment(now).format('YYYY');
             var event = {
                 event: 'test',
                 data: {
@@ -671,6 +671,41 @@ describe('GoodConsole', function () {
                 },
                 tags: ['user'],
                 timestamp: now
+            };
+
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [test,user], data: {"reason":"for testing"}\n');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
+
+            var s = internals.readStream(done);
+
+            reporter.init(s, null, function (err) {
+
+                expect(err).to.not.exist();
+                s.push(event);
+                s.push(null);
+            });
+        });
+
+        it('formats the timestamp even if it\'s a string', function (done) {
+
+            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ' });
+            var now = Date.now();
+            var timeString = Moment(now).format('YYYY - ZZ');
+            var event = {
+                event: 'test',
+                data: {
+                    reason: 'for testing'
+                },
+                tags: ['user'],
+                timestamp: now + ''
             };
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
