@@ -62,6 +62,49 @@ internals.request = {
     method: 'get',
     path: '/'
 };
+internals.wreck = {
+    event: 'wreck',
+    timestamp: 1446738313624,
+    timeSpent: 29,
+    pid: 25316,
+    request: {
+        method: 'GET',
+        path: '/test',
+        url: 'http://localhost/test',
+        protocol: 'http:',
+        host: 'localhost'
+    },
+    response: {
+        statusCode: 200,
+        statusMessage: 'OK'
+    }
+};
+internals.wreckError = {
+    event: 'wreck',
+    timestamp: 1446740440479,
+    timeSpent: 7,
+    pid: 28215,
+    error: {
+        message: 'test error',
+        stack: 'test stack'
+    },
+    request: {
+        method: 'GET',
+        path: '/test',
+        url: 'http://localhost/test',
+        protocol: 'http:',
+        host: 'localhost',
+        headers: {
+            host: 'localhost'
+        }
+    },
+    response: {
+        statusCode: undefined,
+        statusMessage: undefined,
+        headers: undefined
+    }
+};
+
 
 internals.readStream = function (done) {
 
@@ -450,6 +493,66 @@ describe('GoodConsole', function () {
 
                 expect(err).to.not.exist();
                 s.push(internals.request);
+                s.push(null);
+            });
+        });
+
+        it('logs to the console for "wreck" events', function (done) {
+
+            var reporter = GoodConsole({ wreck: '*' });
+            var now = Date.now();
+            var timeString = Moment(now).format(internals.defaults.format);
+
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [wreck], \u001b[1;32mget\u001b[0m: http://localhost/test \u001b[32m200\u001b[0m OK (29ms)\n');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
+
+            internals.wreck.timestamp = now;
+
+            var s = internals.readStream(done);
+
+            reporter.init(s, null, function (err) {
+
+                expect(err).to.not.exist();
+
+                s.push(internals.wreck);
+                s.push(null);
+            });
+        });
+
+        it('logs to the console for "wreck" events that contain errors', function (done) {
+
+            var reporter = GoodConsole({ wreck: '*' });
+            var now = Date.now();
+            var timeString = Moment(now).format(internals.defaults.format);
+
+            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                if (string.indexOf(timeString) === 0) {
+                    stand.restore();
+                    expect(string).to.equal(timeString + ', [wreck], \u001b[1;32mget\u001b[0m: http://localhost/test (7ms) error: test error stack: test stack\n');
+                }
+                else {
+                    stand.original(string, enc, callback);
+                }
+            });
+
+            internals.wreckError.timestamp = now;
+
+            var s = internals.readStream(done);
+
+            reporter.init(s, null, function (err) {
+
+                expect(err).to.not.exist();
+
+                s.push(internals.wreckError);
                 s.push(null);
             });
         });
