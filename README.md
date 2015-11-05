@@ -37,3 +37,5 @@ Below are example outputs for the designated event type:
 - "request" - 141225/093015.900, [request, `event.tags`], data: {"message":"you made a request to a resource"}
 - "log" - 141225/093015.900, [log, `event.tags`], data: you logged a message
 - "response" - 141223/164207.694, [response], localhost: post /data {"name":"adam"} 200 (150ms) response payload: {"foo":"bar","value":1}
+- "wreck" - 141223/164207.694, [wreck], get: http://hapijs.com/test 200 OK (29ms)
+- "wreck" (with error) - 151105/084704.603, [wreck], get: http://hapijs.com/test (7ms) error: some error stack: some stack trace
