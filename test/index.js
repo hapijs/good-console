@@ -166,7 +166,7 @@ describe('GoodConsole', function () {
 
                 var reporter = GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
 
                 StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -196,7 +196,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 delete event.query;
@@ -228,7 +228,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 delete event.responsePayload;
@@ -260,7 +260,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
@@ -291,7 +291,7 @@ describe('GoodConsole', function () {
 
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
                 var event = Hoek.clone(internals.response);
 
                 StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
@@ -324,7 +324,7 @@ describe('GoodConsole', function () {
                 var counter = 1;
                 var reporter = new GoodConsole({ response: '*' });
                 var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
+                var timeString = Moment.utc(now).format(internals.defaults.format);
                 var colors = {
                     1: 32,
                     2: 32,
@@ -376,7 +376,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ ops: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = Hoek.clone(internals.ops);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
@@ -406,7 +406,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ error: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'error',
                 error: {
@@ -442,7 +442,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ request: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -471,7 +471,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ request: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -501,7 +501,7 @@ describe('GoodConsole', function () {
 
             var reporter = GoodConsole({ wreck: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -531,7 +531,7 @@ describe('GoodConsole', function () {
 
             var reporter = GoodConsole({ wreck: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -561,7 +561,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 data: {
@@ -596,7 +596,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 data: 'for testing',
@@ -629,7 +629,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
             var event = {
                 event: 'test',
                 tags: 'user',
@@ -661,7 +661,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ log: '*' }, { format: 'DD-YY -- ZZ', utc: false });
             var now = Date.now();
-            var timeString = Moment(now).format('DD-YY -- ZZ');
+            var timeString = Moment.utc(now).format('DD-YY -- ZZ');
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -693,7 +693,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ log: '*' });
             var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            var timeString = Moment.utc(now).format(internals.defaults.format);
 
             StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
 
@@ -729,7 +729,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY' });
             var now = Date.now();
-            var timeString = Moment(now).format('YYYY');
+            var timeString = Moment.utc(now).format('YYYY');
             var event = {
                 event: 'test',
                 data: {
@@ -799,7 +799,7 @@ describe('GoodConsole', function () {
 
             var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ' });
             var now = Date.now();
-            var timeString = Moment(now).format('YYYY - ZZ');
+            var timeString = Moment.utc(now).format('YYYY - ZZ');
             var event = {
                 event: 'test',
                 data: {
