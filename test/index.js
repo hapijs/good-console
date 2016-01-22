@@ -287,6 +287,37 @@ describe('GoodConsole', function () {
                 });
             });
 
+            it('prints request events with no colors when \'color\' config is set to false', function (done) {
+
+                var reporter = new GoodConsole({ response: '*' }, { color: false });
+                var now = Date.now();
+                var timeString = Moment(now).format(internals.defaults.format);
+                var event = Hoek.clone(internals.response);
+
+                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+
+                    if (string.indexOf(timeString) === 0) {
+                        stand.restore();
+                        expect(string).to.equal(timeString + ', [response], localhost: head /data {"name":"adam"} 200 (150ms) response payload: {"foo":"bar","value":1}\n');
+                    }
+                    else {
+                        stand.original(string, enc, callback);
+                    }
+                });
+
+                event.timestamp = now;
+                event.method = 'head';
+
+                var s = internals.readStream(done);
+
+                reporter.init(s, null, function (err) {
+
+                    expect(err).to.not.exist();
+                    s.push(event);
+                    s.push(null);
+                });
+            });
+
             it('does not log a status code if there is not one attached', function (done) {
 
                 var reporter = new GoodConsole({ response: '*' });
