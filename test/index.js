@@ -128,7 +128,7 @@ const it = lab.it;
 
 describe('GoodConsole', () => {
 
-    it('returns a new object without "new"', (done) => {
+    it('returns a new object without "new"', { plan: 1 }, (done) => {
 
         const reporter = GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
@@ -136,7 +136,7 @@ describe('GoodConsole', () => {
         done();
     });
 
-    it('returns a new object with "new"', (done) => {
+    it('returns a new object with "new"', { plan: 1 }, (done) => {
 
         const reporter = new GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
@@ -144,7 +144,7 @@ describe('GoodConsole', () => {
         done();
     });
 
-    it('throws an error if the incomming stream is not in objectMode', (done) => {
+    it('throws an error if the incomming stream is not in objectMode', { plan: 3 }, (done) => {
 
         const reporter = GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
@@ -163,7 +163,7 @@ describe('GoodConsole', () => {
 
         describe('printResponse()', () => {
 
-            it('logs to the console for "response" events', (done) => {
+            it('logs to the console for "response" events', { plan: 2 }, (done) => {
 
                 const reporter = GoodConsole({ response: '*' });
                 const now = Date.now();
@@ -193,7 +193,7 @@ describe('GoodConsole', () => {
                 });
             });
 
-            it('logs to the console for "response" events without a query', (done) => {
+            it('logs to the console for "response" events without a query', { plan: 2 }, (done) => {
 
                 const reporter = new GoodConsole({ response: '*' });
                 const now = Date.now();
@@ -225,7 +225,7 @@ describe('GoodConsole', () => {
                 });
             });
 
-            it('logs to the console for "response" events without a responsePayload', (done) => {
+            it('logs to the console for "response" events without a responsePayload', { plan: 2 }, (done) => {
 
                 const reporter = new GoodConsole({ response: '*' });
                 const now = Date.now();
@@ -257,7 +257,7 @@ describe('GoodConsole', () => {
                 });
             });
 
-            it('provides a default color for response methods', (done) => {
+            it('provides a default color for response methods', { plan: 2 }, (done) => {
 
                 const reporter = new GoodConsole({ response: '*' });
                 const now = Date.now();
@@ -288,7 +288,7 @@ describe('GoodConsole', () => {
                 });
             });
 
-            it('prints request events with no colors when \'color\' config is set to false', (done) => {
+            it('prints request events with no colors when \'color\' config is set to false', { plan: 2 }, (done) => {
 
                 const reporter = new GoodConsole({ response: '*' }, { color: false });
                 const now = Date.now();
@@ -319,7 +319,7 @@ describe('GoodConsole', () => {
                 });
             });
 
-            it('does not log a status code if there is not one attached', (done) => {
+            it('does not log a status code if there is not one attached', { plan: 2 }, (done) => {
 
                 const reporter = new GoodConsole({ response: '*' });
                 const now = Date.now();
@@ -351,7 +351,7 @@ describe('GoodConsole', () => {
 
             });
 
-            it('uses different colors for different status codes', (done) => {
+            it('uses different colors for different status codes', { plan: 6 }, (done) => {
 
                 let counter = 1;
                 const reporter = new GoodConsole({ response: '*' });
@@ -404,7 +404,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints ops events', (done) => {
+        it('prints ops events', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ ops: '*' });
             const now = Date.now();
@@ -434,7 +434,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints error events', (done) => {
+        it('prints error events', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ error: '*' });
             const now = Date.now();
@@ -470,7 +470,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints request events with string data', (done) => {
+        it('prints request events with string data', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ request: '*' });
             const now = Date.now();
@@ -499,7 +499,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints request events with object data', (done) => {
+        it('prints request events with object data', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ request: '*' });
             const now = Date.now();
@@ -529,7 +529,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('logs to the console for "wreck" events', (done) => {
+        it('logs to the console for "wreck" events', { plan: 2 }, (done) => {
 
             const reporter = GoodConsole({ wreck: '*' });
             const now = Date.now();
@@ -559,7 +559,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('logs to the console for "wreck" events that contain errors', (done) => {
+        it('logs to the console for "wreck" events that contain errors', { plan: 2 }, (done) => {
 
             const reporter = GoodConsole({ wreck: '*' });
             const now = Date.now();
@@ -589,7 +589,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints a generic message for unknown event types with "data" as an object', (done) => {
+        it('prints a generic message for unknown event types with "data" as an object', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ test: '*' });
             const now = Date.now();
@@ -624,7 +624,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints a generic message for unknown event types with "data" as a string', (done) => {
+        it('prints a generic message for unknown event types with "data" as a string', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ test: '*' });
             const now = Date.now();
@@ -657,7 +657,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints a generic message for unknown event types with no "data" attribute', (done) => {
+        it('prints a generic message for unknown event types with no "data" attribute', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ test: '*' });
             const now = Date.now();
@@ -689,7 +689,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints log events with string data', (done) => {
+        it('prints log events with string data', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ log: '*' }, { format: 'DD-YY -- ZZ', utc: false });
             const now = Date.now();
@@ -721,7 +721,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('prints log events with object data', (done) => {
+        it('prints log events with object data', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ log: '*' });
             const now = Date.now();
@@ -757,7 +757,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('formats the timestamp based on the supplied option', (done) => {
+        it('formats the timestamp based on the supplied option', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ test: '*' }, { format: 'YYYY' });
             const now = Date.now();
@@ -792,7 +792,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('formats the timestamp based on the supplied option non-utc mode', (done) => {
+        it('formats the timestamp based on the supplied option non-utc mode', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ', utc: false });
             const now = Date.now();
@@ -827,7 +827,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('formats the timestamp even if it\'s a string', (done) => {
+        it('formats the timestamp even if it\'s a string', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ' });
             const now = Date.now();
@@ -862,7 +862,7 @@ describe('GoodConsole', () => {
             });
         });
 
-        it('uses the current time if the event does not have a timestamp property', (done) => {
+        it('uses the current time if the event does not have a timestamp property', { plan: 2 }, (done) => {
 
             const reporter = new GoodConsole({ test: '*' });
             const event = {
