@@ -1,17 +1,18 @@
+'use strict';
 // Load modules
-var Stream = require('stream');
+const Stream = require('stream');
 
-var Code = require('code');
-var Hoek = require('hoek');
-var Lab = require('lab');
-var Moment = require('moment');
-var StandIn = require('stand-in');
-var GoodConsole = require('..');
+const Code = require('code');
+const Hoek = require('hoek');
+const Lab = require('lab');
+const Moment = require('moment');
+const StandIn = require('stand-in');
+const GoodConsole = require('..');
 
 
 // Declare internals
 
-var internals = {
+const internals = {
     defaults: {
         format: 'YYMMDD/HHmmss.SSS'
     }
@@ -108,7 +109,7 @@ internals.wreckError = {
 
 internals.readStream = function (done) {
 
-    var result = new Stream.Readable({ objectMode: true });
+    const result = new Stream.Readable({ objectMode: true });
     result._read = Hoek.ignore;
 
     if (typeof done === 'function') {
@@ -120,37 +121,37 @@ internals.readStream = function (done) {
 
 // Test shortcuts
 
-var lab = exports.lab = Lab.script();
-var expect = Code.expect;
-var describe = lab.describe;
-var it = lab.it;
+const lab = exports.lab = Lab.script();
+const expect = Code.expect;
+const describe = lab.describe;
+const it = lab.it;
 
-describe('GoodConsole', function () {
+describe('GoodConsole', () => {
 
-    it('returns a new object without "new"', function (done) {
+    it('returns a new object without "new"', { plan: 1 }, (done) => {
 
-        var reporter = GoodConsole({ log: '*' });
+        const reporter = GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
 
         done();
     });
 
-    it('returns a new object with "new"', function (done) {
+    it('returns a new object with "new"', { plan: 1 }, (done) => {
 
-        var reporter = new GoodConsole({ log: '*' });
+        const reporter = new GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
 
         done();
     });
 
-    it('throws an error if the incomming stream is not in objectMode', function (done) {
+    it('throws an error if the incomming stream is not in objectMode', { plan: 3 }, (done) => {
 
-        var reporter = GoodConsole({ log: '*' });
+        const reporter = GoodConsole({ log: '*' });
         expect(reporter._settings).to.exist();
 
-        var stream = new Stream.Readable();
+        const stream = new Stream.Readable();
 
-        reporter.init(stream, null, function (err) {
+        reporter.init(stream, null, (err) => {
 
             expect(err).to.exist();
             expect(err.message).to.equal('stream must be in object mode');
@@ -158,17 +159,17 @@ describe('GoodConsole', function () {
         });
     });
 
-    describe('_report()', function () {
+    describe('_report()', () => {
 
-        describe('printResponse()', function () {
+        describe('printResponse()', () => {
 
-            it('logs to the console for "response" events', function (done) {
+            it('logs to the console for "response" events', { plan: 2 }, (done) => {
 
-                var reporter = GoodConsole({ response: '*' });
-                var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
+                const reporter = GoodConsole({ response: '*' });
+                const now = Date.now();
+                const timeString = Moment(now).format(internals.defaults.format);
 
-                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+                StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
@@ -181,9 +182,9 @@ describe('GoodConsole', function () {
 
                 internals.response.timestamp = now;
 
-                var s = internals.readStream(done);
+                const s = internals.readStream(done);
 
-                reporter.init(s, null, function (err) {
+                reporter.init(s, null, (err) => {
 
                     expect(err).to.not.exist();
 
@@ -192,16 +193,16 @@ describe('GoodConsole', function () {
                 });
             });
 
-            it('logs to the console for "response" events without a query', function (done) {
+            it('logs to the console for "response" events without a query', { plan: 2 }, (done) => {
 
-                var reporter = new GoodConsole({ response: '*' });
-                var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
-                var event = Hoek.clone(internals.response);
+                const reporter = new GoodConsole({ response: '*' });
+                const now = Date.now();
+                const timeString = Moment(now).format(internals.defaults.format);
+                const event = Hoek.clone(internals.response);
 
                 delete event.query;
 
-                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+                StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
@@ -214,9 +215,9 @@ describe('GoodConsole', function () {
 
                 event.timestamp = now;
 
-                var s = internals.readStream(done);
+                const s = internals.readStream(done);
 
-                reporter.init(s, null, function (err) {
+                reporter.init(s, null, (err) => {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -224,16 +225,16 @@ describe('GoodConsole', function () {
                 });
             });
 
-            it('logs to the console for "response" events without a responsePayload', function (done) {
+            it('logs to the console for "response" events without a responsePayload', { plan: 2 }, (done) => {
 
-                var reporter = new GoodConsole({ response: '*' });
-                var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
-                var event = Hoek.clone(internals.response);
+                const reporter = new GoodConsole({ response: '*' });
+                const now = Date.now();
+                const timeString = Moment(now).format(internals.defaults.format);
+                const event = Hoek.clone(internals.response);
 
                 delete event.responsePayload;
 
-                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+                StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
@@ -246,9 +247,9 @@ describe('GoodConsole', function () {
 
                 event.timestamp = now;
 
-                var s = internals.readStream(done);
+                const s = internals.readStream(done);
 
-                reporter.init(s, null, function (err) {
+                reporter.init(s, null, (err) => {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -256,14 +257,14 @@ describe('GoodConsole', function () {
                 });
             });
 
-            it('provides a default color for response methods', function (done) {
+            it('provides a default color for response methods', { plan: 2 }, (done) => {
 
-                var reporter = new GoodConsole({ response: '*' });
-                var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
-                var event = Hoek.clone(internals.response);
+                const reporter = new GoodConsole({ response: '*' });
+                const now = Date.now();
+                const timeString = Moment(now).format(internals.defaults.format);
+                const event = Hoek.clone(internals.response);
 
-                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+                StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
@@ -277,9 +278,9 @@ describe('GoodConsole', function () {
                 event.timestamp = now;
                 event.method = 'head';
 
-                var s = internals.readStream(done);
+                const s = internals.readStream(done);
 
-                reporter.init(s, null, function (err) {
+                reporter.init(s, null, (err) => {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -287,14 +288,14 @@ describe('GoodConsole', function () {
                 });
             });
 
-            it('prints request events with no colors when \'color\' config is set to false', function (done) {
+            it('prints request events with no colors when \'color\' config is set to false', { plan: 2 }, (done) => {
 
-                var reporter = new GoodConsole({ response: '*' }, { color: false });
-                var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
-                var event = Hoek.clone(internals.response);
+                const reporter = new GoodConsole({ response: '*' }, { color: false });
+                const now = Date.now();
+                const timeString = Moment(now).format(internals.defaults.format);
+                const event = Hoek.clone(internals.response);
 
-                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+                StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
@@ -308,9 +309,9 @@ describe('GoodConsole', function () {
                 event.timestamp = now;
                 event.method = 'head';
 
-                var s = internals.readStream(done);
+                const s = internals.readStream(done);
 
-                reporter.init(s, null, function (err) {
+                reporter.init(s, null, (err) => {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -318,14 +319,14 @@ describe('GoodConsole', function () {
                 });
             });
 
-            it('does not log a status code if there is not one attached', function (done) {
+            it('does not log a status code if there is not one attached', { plan: 2 }, (done) => {
 
-                var reporter = new GoodConsole({ response: '*' });
-                var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
-                var event = Hoek.clone(internals.response);
+                const reporter = new GoodConsole({ response: '*' });
+                const now = Date.now();
+                const timeString = Moment(now).format(internals.defaults.format);
+                const event = Hoek.clone(internals.response);
 
-                StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+                StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                     if (string.indexOf(timeString) === 0) {
                         stand.restore();
@@ -339,9 +340,9 @@ describe('GoodConsole', function () {
                 event.timestamp = now;
                 delete event.statusCode;
 
-                var s = internals.readStream(done);
+                const s = internals.readStream(done);
 
-                reporter.init(s, null, function (err) {
+                reporter.init(s, null, (err) => {
 
                     expect(err).to.not.exist();
                     s.push(event);
@@ -350,13 +351,13 @@ describe('GoodConsole', function () {
 
             });
 
-            it('uses different colors for different status codes', function (done) {
+            it('uses different colors for different status codes', { plan: 6 }, (done) => {
 
-                var counter = 1;
-                var reporter = new GoodConsole({ response: '*' });
-                var now = Date.now();
-                var timeString = Moment(now).format(internals.defaults.format);
-                var colors = {
+                let counter = 1;
+                const reporter = new GoodConsole({ response: '*' });
+                const now = Date.now();
+                const timeString = Moment(now).format(internals.defaults.format);
+                const colors = {
                     1: 32,
                     2: 32,
                     3: 36,
@@ -364,11 +365,11 @@ describe('GoodConsole', function () {
                     5: 31
                 };
 
-                var write = StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+                const write = StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                     if (string.indexOf(timeString) === 0) {
 
-                        var expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) \n', timeString, colors[counter], counter * 100);
+                        const expected = Hoek.format('%s, [response], localhost: [1;33mpost[0m /data  [%sm%s[0m (150ms) \n', timeString, colors[counter], counter * 100);
                         expect(string).to.equal(expected);
 
                         counter++;
@@ -378,18 +379,18 @@ describe('GoodConsole', function () {
                     }
                 });
 
-                var s = internals.readStream(function () {
+                const s = internals.readStream(() => {
 
                     write.restore();
                     done();
                 });
 
-                reporter.init(s, null, function (err) {
+                reporter.init(s, null, (err) => {
 
                     expect(err).to.not.exist();
 
-                    for (var i = 1; i < 6; ++i) {
-                        var event = Hoek.clone(internals.response);
+                    for (let i = 1; i < 6; ++i) {
+                        const event = Hoek.clone(internals.response);
                         event.statusCode = i * 100;
                         event.timestamp = now;
 
@@ -403,14 +404,14 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints ops events', function (done) {
+        it('prints ops events', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ ops: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
-            var event = Hoek.clone(internals.ops);
+            const reporter = new GoodConsole({ ops: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
+            const event = Hoek.clone(internals.ops);
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -423,9 +424,9 @@ describe('GoodConsole', function () {
 
             event.timestamp = now;
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -433,12 +434,12 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints error events', function (done) {
+        it('prints error events', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ error: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
-            var event = {
+            const reporter = new GoodConsole({ error: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
+            const event = {
                 event: 'error',
                 error: {
                     message: 'test message',
@@ -446,7 +447,7 @@ describe('GoodConsole', function () {
                 }
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -459,9 +460,9 @@ describe('GoodConsole', function () {
 
             event.timestamp = now;
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -469,13 +470,13 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints request events with string data', function (done) {
+        it('prints request events with string data', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ request: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            const reporter = new GoodConsole({ request: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -488,9 +489,9 @@ describe('GoodConsole', function () {
 
             internals.request.timestamp = now;
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(internals.request);
@@ -498,13 +499,13 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints request events with object data', function (done) {
+        it('prints request events with object data', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ request: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            const reporter = new GoodConsole({ request: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -518,9 +519,9 @@ describe('GoodConsole', function () {
             internals.request.timestamp = now;
             internals.request.data = { message: 'you made a request to a resource' };
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(internals.request);
@@ -528,13 +529,13 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('logs to the console for "wreck" events', function (done) {
+        it('logs to the console for "wreck" events', { plan: 2 }, (done) => {
 
-            var reporter = GoodConsole({ wreck: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            const reporter = GoodConsole({ wreck: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -547,9 +548,9 @@ describe('GoodConsole', function () {
 
             internals.wreck.timestamp = now;
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
 
@@ -558,13 +559,13 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('logs to the console for "wreck" events that contain errors', function (done) {
+        it('logs to the console for "wreck" events that contain errors', { plan: 2 }, (done) => {
 
-            var reporter = GoodConsole({ wreck: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            const reporter = GoodConsole({ wreck: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -577,9 +578,9 @@ describe('GoodConsole', function () {
 
             internals.wreckError.timestamp = now;
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
 
@@ -588,12 +589,12 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints a generic message for unknown event types with "data" as an object', function (done) {
+        it('prints a generic message for unknown event types with "data" as an object', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ test: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
-            var event = {
+            const reporter = new GoodConsole({ test: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
+            const event = {
                 event: 'test',
                 data: {
                     reason: 'for testing'
@@ -602,7 +603,7 @@ describe('GoodConsole', function () {
                 timestamp: now
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -613,9 +614,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -623,19 +624,19 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints a generic message for unknown event types with "data" as a string', function (done) {
+        it('prints a generic message for unknown event types with "data" as a string', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ test: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
-            var event = {
+            const reporter = new GoodConsole({ test: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
+            const event = {
                 event: 'test',
                 data: 'for testing',
                 tags: ['user'],
                 timestamp: now
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -646,9 +647,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -656,18 +657,18 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints a generic message for unknown event types with no "data" attribute', function (done) {
+        it('prints a generic message for unknown event types with no "data" attribute', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ test: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
-            var event = {
+            const reporter = new GoodConsole({ test: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
+            const event = {
                 event: 'test',
                 tags: 'user',
                 timestamp: now
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -678,9 +679,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -688,13 +689,13 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints log events with string data', function (done) {
+        it('prints log events with string data', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ log: '*' }, { format: 'DD-YY -- ZZ', utc: false });
-            var now = Date.now();
-            var timeString = Moment(now).format('DD-YY -- ZZ');
+            const reporter = new GoodConsole({ log: '*' }, { format: 'DD-YY -- ZZ', utc: false });
+            const now = Date.now();
+            const timeString = Moment(now).format('DD-YY -- ZZ');
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -705,9 +706,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push({
@@ -720,13 +721,13 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('prints log events with object data', function (done) {
+        it('prints log events with object data', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ log: '*' });
-            var now = Date.now();
-            var timeString = Moment(now).format(internals.defaults.format);
+            const reporter = new GoodConsole({ log: '*' });
+            const now = Date.now();
+            const timeString = Moment(now).format(internals.defaults.format);
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -739,9 +740,9 @@ describe('GoodConsole', function () {
 
             internals.request.timestamp = now;
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push({
@@ -756,12 +757,12 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('formats the timestamp based on the supplied option', function (done) {
+        it('formats the timestamp based on the supplied option', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY' });
-            var now = Date.now();
-            var timeString = Moment(now).format('YYYY');
-            var event = {
+            const reporter = new GoodConsole({ test: '*' }, { format: 'YYYY' });
+            const now = Date.now();
+            const timeString = Moment(now).format('YYYY');
+            const event = {
                 event: 'test',
                 data: {
                     reason: 'for testing'
@@ -770,7 +771,7 @@ describe('GoodConsole', function () {
                 timestamp: now
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -781,9 +782,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -791,12 +792,12 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('formats the timestamp based on the supplied option non-utc mode', function (done) {
+        it('formats the timestamp based on the supplied option non-utc mode', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ', utc: false });
-            var now = Date.now();
-            var timeString = Moment(now).format('YYYY - ZZ');
-            var event = {
+            const reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ', utc: false });
+            const now = Date.now();
+            const timeString = Moment(now).format('YYYY - ZZ');
+            const event = {
                 event: 'test',
                 data: {
                     reason: 'for testing'
@@ -805,7 +806,7 @@ describe('GoodConsole', function () {
                 timestamp: now
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -816,9 +817,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -826,12 +827,12 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('formats the timestamp even if it\'s a string', function (done) {
+        it('formats the timestamp even if it\'s a string', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ' });
-            var now = Date.now();
-            var timeString = Moment(now).format('YYYY - ZZ');
-            var event = {
+            const reporter = new GoodConsole({ test: '*' }, { format: 'YYYY - ZZ' });
+            const now = Date.now();
+            const timeString = Moment(now).format('YYYY - ZZ');
+            const event = {
                 event: 'test',
                 data: {
                     reason: 'for testing'
@@ -840,7 +841,7 @@ describe('GoodConsole', function () {
                 timestamp: now + ''
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf(timeString) === 0) {
                     stand.restore();
@@ -851,9 +852,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
@@ -861,10 +862,10 @@ describe('GoodConsole', function () {
             });
         });
 
-        it('uses the current time if the event does not have a timestamp property', function (done) {
+        it('uses the current time if the event does not have a timestamp property', { plan: 2 }, (done) => {
 
-            var reporter = new GoodConsole({ test: '*' });
-            var event = {
+            const reporter = new GoodConsole({ test: '*' });
+            const event = {
                 event: 'test',
                 data: {
                     reason: 'for testing'
@@ -872,7 +873,7 @@ describe('GoodConsole', function () {
                 tags: ['user', '!!!']
             };
 
-            StandIn.replace(process.stdout, 'write', function (stand, string, enc, callback) {
+            StandIn.replace(process.stdout, 'write', (stand, string, enc, callback) => {
 
                 if (string.indexOf('!!!') >= 0) {
                     stand.restore();
@@ -883,9 +884,9 @@ describe('GoodConsole', function () {
                 }
             });
 
-            var s = internals.readStream(done);
+            const s = internals.readStream(done);
 
-            reporter.init(s, null, function (err) {
+            reporter.init(s, null, (err) => {
 
                 expect(err).to.not.exist();
                 s.push(event);
