@@ -42,7 +42,6 @@ internals.ops = {
         concurrents: {},
         responseTimes: {},
         listener: {},
-        responseTimes: {},
         sockets: { http: {}, https: {} }
     }
 };

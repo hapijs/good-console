@@ -2,7 +2,8 @@
 
 `good-console` is a transform stream useful for turning [good](https://github.com/hapijs/good) server events into formatted strings.
 
-[![Build Status](https://travis-ci.org/hapijs/good-console.svg?branch=master)](http://travis-ci.org/hapijs/good-console)![Current Version](https://img.shields.io/npm/v/good-console.svg)
+[![Build Status](https://travis-ci.org/hapijs/good-console.svg?branch=master)](http://travis-ci.org/hapijs/good-console)
+[![Current Version](https://img.shields.io/npm/v/good-console.svg)](https://www.npmjs.com/package/good-console)
 
 Lead Maintainer: [Adam Bretz](https://github.com/arb)
 
