@@ -368,7 +368,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [request,user,info] data: you made a request\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, (1419005623332:new-host.local:48767:i3vrb3z7:10000) [request,user,info] data: you made a request\n');
                     done();
                 });
             });
