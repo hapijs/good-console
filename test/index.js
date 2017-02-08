@@ -346,7 +346,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [error,user,info] message: Just a simple error stack: Error: Just a simple Error\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [error,user,info] message: Just a simple error, stack: Error: Just a simple Error\n');
                     done();
                 });
             });
