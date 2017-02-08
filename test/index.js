@@ -460,6 +460,28 @@ describe('GoodConsole', () => {
                     done();
                 });
             });
+
+            it('returns a formatted string for "default" events with data as Error', { plan: 2 }, (done) => {
+
+                const reporter = new GoodConsole();
+                const out = new Streams.Writer();
+                const reader = new Streams.Reader();
+
+                reader.pipe(reporter).pipe(out);
+
+                const defaultEvent = Object.assign({}, internals.default);
+                defaultEvent.data = new Error('you logged an error');
+
+                reader.push(defaultEvent);
+                reader.push(null);
+
+                reader.once('end', () => {
+
+                    expect(out.data).to.have.length(1);
+                    expect(out.data[0].split('\n')[0]).to.be.equal('160318/013330.957, [request,user,info] message: you logged an error stack: Error: you logged an error');
+                    done();
+                });
+            });
         });
     });
 });
