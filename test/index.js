@@ -478,7 +478,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0].split('\n')[0]).to.be.equal('160318/013330.957, [request,user,info] message: you logged an error stack: Error: you logged an error');
+                    expect(out.data[0].split('\n')[0]).to.be.equal('160318/013330.957, [request,user,info] message: you logged an error, stack: Error: you logged an error');
                     done();
                 });
             });
