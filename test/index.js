@@ -68,6 +68,29 @@ internals.response = {
     }
 };
 
+internals.responseWithTail = Object.assign({ log: [] }, internals.response);
+
+internals.requestReceivedTail = Object.assign({
+    log: [{
+        request: '1505155901523:localhost.localdomain:28865:j7giyl9v:10000',
+        timestamp: 1505155901525,
+        tags: ['received'],
+        data: { method: 'get', url: '/foo/bar', agent: 'HTTPie/0.9.4' },
+        internal: true
+    }]
+}, internals.response);
+
+internals.requestResponseValidationErrorTail = Object.assign({
+    log: [{
+        request: '1505155901523:localhost.localdomain:28865:j7giyl9v:10000',
+        timestamp: 1505155901525,
+        tags: ['validation', 'response', 'error'],
+        data: 'child "links" fails because ["links" must be an array]',
+        internal: true
+    }]
+}, internals.response);
+
+
 internals.request = {
     event: 'request',
     timestamp: 1458264810957,
@@ -111,6 +134,86 @@ const it = lab.it;
 describe('GoodConsole', () => {
 
     describe('report', () => {
+
+        describe('request tail events', () => {
+
+            describe('with requestTails: "*"', () => {
+
+                it('returns a formatted string for request tail "received" events and the response', { plan: 2 }, (done) => {
+
+                    const reporter = new GoodConsole({ requestTails: '*' });
+                    const out = new Streams.Writer();
+                    const reader = new Streams.Reader();
+
+                    reader.pipe(reporter).pipe(out);
+                    reader.push(internals.requestReceivedTail);
+                    reader.push(null);
+                    reader.once('end', () => {
+
+                        expect(out.data).to.have.length(1);
+                        expect(out.data[0]).to.be.equal(`170911/185141.525, [request,received] {"request":"1505155901523:localhost.localdomain:28865:j7giyl9v:10000","method":"get","url":"/foo/bar","agent":"HTTPie/0.9.4"}
+160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (150ms)\n`);
+                        done();
+                    });
+                });
+
+                it('returns a formatted string for request tail "response validation error" events and the response', { plan: 2 }, (done) => {
+
+                    const reporter = new GoodConsole({ requestTails: '*' });
+                    const out = new Streams.Writer();
+                    const reader = new Streams.Reader();
+
+                    reader.pipe(reporter).pipe(out);
+                    reader.push(internals.requestResponseValidationErrorTail);
+                    reader.push(null);
+                    reader.once('end', () => {
+
+                        expect(out.data).to.have.length(1);
+                        expect(out.data[0]).to.be.equal(`170911/185141.525, [request,validation,response,error] {"request":"1505155901523:localhost.localdomain:28865:j7giyl9v:10000","message":"child \\"links\\" fails because [\\"links\\" must be an array]"}
+160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (150ms)\n`);
+                        done();
+                    });
+                });
+            });
+
+            describe('with requestTails: ["validation"]', () => {
+
+                it('ignores request tail "received" events and returns a formatted string for the response', { plan: 2 }, (done) => {
+
+                    const reporter = new GoodConsole({ requestTails: ['validation'] });
+                    const out = new Streams.Writer();
+                    const reader = new Streams.Reader();
+
+                    reader.pipe(reporter).pipe(out);
+                    reader.push(internals.requestReceivedTail);
+                    reader.push(null);
+                    reader.once('end', () => {
+
+                        expect(out.data).to.have.length(1);
+                        expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (150ms)\n');
+                        done();
+                    });
+                });
+
+                it('returns a formatted string for request tail "response validation error" events and the response', { plan: 2 }, (done) => {
+
+                    const reporter = new GoodConsole({ requestTails: ['validation'] });
+                    const out = new Streams.Writer();
+                    const reader = new Streams.Reader();
+
+                    reader.pipe(reporter).pipe(out);
+                    reader.push(internals.requestResponseValidationErrorTail);
+                    reader.push(null);
+                    reader.once('end', () => {
+
+                        expect(out.data).to.have.length(1);
+                        expect(out.data[0]).to.be.equal(`170911/185141.525, [request,validation,response,error] {"request":"1505155901523:localhost.localdomain:28865:j7giyl9v:10000","message":"child \\"links\\" fails because [\\"links\\" must be an array]"}
+160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (150ms)\n`);
+                        done();
+                    });
+                });
+            });
+        });
 
         describe('response events', () => {
 
@@ -304,6 +407,24 @@ describe('GoodConsole', () => {
                     done();
                 });
             });
+
+            it('returns a formatted string for "response" events with empty log', { plan: 2 }, (done) => {
+
+                const reporter = new GoodConsole();
+                const out = new Streams.Writer();
+                const reader = new Streams.Reader();
+
+                reader.pipe(reporter).pipe(out);
+                reader.push(internals.responseWithTail);
+                reader.push(null);
+                reader.once('end', () => {
+
+                    expect(out.data).to.have.length(1);
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (150ms)\n');
+                    done();
+                });
+            });
+
         });
 
         describe('ops events', () => {
