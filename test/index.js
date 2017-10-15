@@ -128,7 +128,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
@@ -149,7 +149,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data  \u001b[32m200\u001b[0m (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data  \u001b[32m200\u001b[0m (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
@@ -171,7 +171,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"}  (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"}  (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
@@ -190,7 +190,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: post /data {"name":"adam"} 200 (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: post /data {"name":"adam"} 200 (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
@@ -214,7 +214,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal(`${date}, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (100ms) (150ms)\n`);
+                    expect(out.data[0]).to.be.equal(`${date}, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (responseSentTime: 100ms) (responseTime: 150ms)\n`);
                     done();
                 });
             });
@@ -236,7 +236,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;34mhead\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;34mhead\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
@@ -258,7 +258,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[31m599\u001b[0m (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[31m599\u001b[0m (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
@@ -280,7 +280,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[33m418\u001b[0m (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[33m418\u001b[0m (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
@@ -302,7 +302,7 @@ describe('GoodConsole', () => {
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
-                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[36m304\u001b[0m (100ms) (150ms)\n');
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[36m304\u001b[0m (responseSentTime: 100ms) (responseTime: 150ms)\n');
                     done();
                 });
             });
