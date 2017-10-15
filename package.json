@@ -14,8 +14,7 @@
     "moment": "2.15.x"
   },
   "devDependencies": {
-    "code": "3.x.x",
-    "lab": "10.x.x"
+    "lab": "^14.x.x"
   },
   "engines": {
     "node": ">=4.x.x"
