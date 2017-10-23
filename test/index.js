@@ -304,6 +304,30 @@ describe('GoodConsole', () => {
                     done();
                 });
             });
+
+            it('appends the result of the responseExtension function', { plan: 3 }, (done) => {
+
+                const reporter = new GoodConsole({
+
+                    responseExtension: (event) => {
+
+                        expect(event.event).to.be.equal('response');
+                        return event.source.remoteAddress;
+                    }
+                });
+                const out = new Streams.Writer();
+                const reader = new Streams.Reader();
+
+                reader.pipe(reporter).pipe(out);
+                reader.push(internals.response);
+                reader.push(null);
+                reader.once('end', () => {
+
+                    expect(out.data).to.have.length(1);
+                    expect(out.data[0]).to.be.equal('160318/013330.957, [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (150ms) 127.0.0.1\n');
+                    done();
+                });
+            });
         });
 
         describe('ops events', () => {

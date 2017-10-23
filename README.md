@@ -16,6 +16,11 @@ Creates a new GoodConsole object with the following arguments:
 	- `format` - [MomentJS](http://momentjs.com/docs/#/displaying/format/) format string. Defaults to 'YYMMDD/HHmmss.SSS'.
 	- `utc` - boolean controlling Moment using [utc mode](http://momentjs.com/docs/#/parsing/utc/) or not. Defaults to `true`.
 	- `color` - a boolean specifying whether to output in color. Defaults to `true`.
+	- `responseExtension` - optional function to append custom output to response log lines. The function takes a Good reponse log event as the argument and returns a string. E.g.:
+		
+			new GoodConsole({
+				responseExtension => `User agent: ${event.source.userAgent}`
+			});
 
 ## Output Formats
 
