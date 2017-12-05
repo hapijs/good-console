@@ -11,11 +11,11 @@
     "hoek": "4.x.x",
     "joi": "8.1.x",
     "json-stringify-safe": "5.0.x",
-    "moment": "2.15.x"
+    "moment": "2.19.x"
   },
   "devDependencies": {
     "code": "3.x.x",
-    "lab": "10.x.x"
+    "lab": "14.x.x"
   },
   "engines": {
     "node": ">=4.x.x"
