@@ -4,7 +4,6 @@
 
 
 const Lab = require('lab');
-const Code = require('code');
 const Moment = require('moment');
 
 const Streams = require('./fixture/streams');
@@ -106,7 +105,7 @@ internals.default = {
 // Test shortcuts
 
 const lab = exports.lab = Lab.script();
-const expect = Code.expect;
+const expect = lab.expect;
 const describe = lab.describe;
 const it = lab.it;
 

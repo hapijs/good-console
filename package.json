@@ -1,6 +1,6 @@
 {
   "name": "good-console",
-  "version": "6.4.0",
+  "version": "6.4.1",
   "repository": "git://github.com/hapijs/good-console",
   "description": "Console broadcasting for Good process monitor",
   "main": "lib/index.js",
@@ -11,10 +11,11 @@
     "hoek": "4.x.x",
     "joi": "8.1.x",
     "json-stringify-safe": "5.0.x",
-    "moment": "2.15.x"
+    "moment": "2.19.x"
   },
   "devDependencies": {
-    "lab": "^14.x.x"
+    "code": "3.x.x",
+    "lab": "14.x.x"
   },
   "engines": {
     "node": ">=4.x.x"
