@@ -469,7 +469,7 @@ describe('GoodConsole', () => {
                 reader.pipe(reporter).pipe(out);
 
                 const defaultEvent = Object.assign({}, internals.default);
-                defaultEvent.data = new Error('you logged an error');
+                defaultEvent.error = new Error('you logged an error');
 
                 reader.push(defaultEvent);
                 reader.push(null);
