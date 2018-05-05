@@ -303,6 +303,38 @@ describe('GoodConsole', () => {
                     done();
                 });
             });
+
+            it('returns a formatted string for "response" events when payload is present', { plan: 2 }, (done) => {
+
+                const reporter = new GoodConsole();
+                const out = new Streams.Writer();
+                const reader = new Streams.Reader();
+                const response = Object.assign({}, internals.response, {
+                    requestPayload: {
+                        foo: 'bar'
+                    },
+                    responsePayload: {
+                        bar: 'foo'
+                    }
+                });
+
+                reader.pipe(reporter).pipe(out);
+                reader.push(response);
+                reader.push(null);
+                reader.once('end', () => {
+
+                    let expected = '160318/013330.957, (1458264811279:localhost:16014:ilx17kv4:10001) [response] http://localhost:61253: \u001b[1;33mpost\u001b[0m /data {"name":"adam"} \u001b[32m200\u001b[0m (150ms)\n';
+                    expected += '{\n';
+                    expected += '  "foo": "bar"\n';
+                    expected += '} -> {\n';
+                    expected += '  "bar": "foo"\n';
+                    expected += '}\n';
+
+                    expect(out.data).to.have.length(1);
+                    expect(out.data[0]).to.be.equal(expected);
+                    done();
+                });
+            });
         });
 
         describe('ops events', () => {
