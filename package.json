@@ -11,7 +11,7 @@
     "hoek": "4.x.x",
     "joi": "12.x.x",
     "json-stringify-safe": "5.0.x",
-    "moment": "2.20.x"
+    "moment": "2.22.x"
   },
   "devDependencies": {
     "code": "4.x.x",
