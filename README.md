@@ -7,6 +7,8 @@
 
 Lead Maintainer: [Open Position](https://github.com/hapijs/good-console/issues/108)
 
+Requires node v8 or above. Use version v7 of this module for node v6 support.
+
 ## Usage
 
 ## `new GoodConsole([config])`
