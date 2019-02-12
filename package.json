@@ -5,20 +5,18 @@
   "description": "Console broadcasting for Good process monitor",
   "main": "lib/index.js",
   "scripts": {
-    "test": "lab -t 100 -vLa code"
+    "test": "lab -t 100 -L -a code"
   },
   "dependencies": {
-    "hoek": "4.x.x",
-    "joi": "12.x.x",
-    "json-stringify-safe": "5.0.x",
-    "moment": "2.22.x"
+    "hoek": "6.x.x",
+    "joi": "14.x.x",
+    "json-stringify-safe": "5.x.x",
+    "moment": "2.x.x"
   },
   "devDependencies": {
-    "code": "4.x.x",
-    "lab": "14.x.x"
-  },
-  "engines": {
-    "node": ">=4.x.x"
+    "code": "5.x.x",
+    "lab": "18.x.x",
+    "teamwork": "3.x.x"
   },
   "license": "BSD-3-Clause"
 }
