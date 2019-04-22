@@ -1,13 +1,10 @@
+<a href="http://hapijs.com"><img src="https://github.com/hapijs/assets/blob/master/images/family.svg" width="180px" align="right" /></a>
+
 # good-console
 
 `good-console` is a transform stream useful for turning [good](https://github.com/hapijs/good) server events into formatted strings.
 
 [![Build Status](https://travis-ci.org/hapijs/good-console.svg?branch=master)](http://travis-ci.org/hapijs/good-console)
-[![Current Version](https://img.shields.io/npm/v/good-console.svg)](https://www.npmjs.com/package/good-console)
-
-Lead Maintainer: [Open Position](https://github.com/hapijs/good-console/issues/108)
-
-Requires node v8 or above. Use version v7 of this module for node v6 support.
 
 ## Usage
 

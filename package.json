@@ -1,22 +1,22 @@
 {
-  "name": "good-console",
+  "name": "@hapi/good-console",
   "version": "8.0.0",
   "repository": "git://github.com/hapijs/good-console",
   "description": "Console broadcasting for Good process monitor",
   "main": "lib/index.js",
-  "scripts": {
-    "test": "lab -t 100 -L -a code"
-  },
   "dependencies": {
-    "hoek": "6.x.x",
-    "joi": "14.x.x",
+    "@hapi/hoek": "6.x.x",
+    "@hapi/joi": "15.x.x",
     "json-stringify-safe": "5.x.x",
     "moment": "2.x.x"
   },
   "devDependencies": {
-    "code": "5.x.x",
-    "lab": "18.x.x",
-    "teamwork": "3.x.x"
+    "@hapi/code": "5.x.x",
+    "@hapi/lab": "18.x.x",
+    "@hapi/teamwork": "3.x.x"
+  },
+  "scripts": {
+    "test": "lab -t 100 -L -a @hapi/code"
   },
   "license": "BSD-3-Clause"
 }

@@ -2,11 +2,11 @@
 
 const Stream = require('stream');
 
-const Code = require('code');
+const Code = require('@hapi/code');
 const GoodConsole = require('..');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const Moment = require('moment');
-const Teamwork = require('teamwork');
+const Teamwork = require('@hapi/teamwork');
 
 
 const internals = {
