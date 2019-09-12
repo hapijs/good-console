@@ -1,6 +1,6 @@
 {
   "name": "@hapi/good-console",
-  "version": "8.1.1",
+  "version": "8.1.2",
   "repository": "git://github.com/hapijs/good-console",
   "description": "Console broadcasting for Good process monitor",
   "main": "lib/index.js",
