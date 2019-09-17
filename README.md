@@ -1,6 +1,6 @@
 <a href="http://hapijs.com"><img src="https://raw.githubusercontent.com/hapijs/assets/master/images/family.png" width="180px" align="right" /></a>
 
-# good-console
+# @hapi/good-console
 
 `good-console` is a transform stream useful for turning [good](https://github.com/hapijs/good) server events into formatted strings.
 
