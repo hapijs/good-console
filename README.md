@@ -1,9 +1,18 @@
-<a href="http://hapijs.com"><img src="https://raw.githubusercontent.com/hapijs/assets/master/images/family.png" width="180px" align="right" /></a>
+<a href="https://hapi.dev"><img src="https://raw.githubusercontent.com/hapijs/assets/master/images/family.png" width="180px" align="right" /></a>
 
 # @hapi/good-console
 
-`good-console` is a transform stream useful for turning [good](https://github.com/hapijs/good) server events into formatted strings.
+#### Console reporting for good console monitor.
 
-[![Build Status](https://travis-ci.org/hapijs/good-console.svg?branch=master)](http://travis-ci.org/hapijs/good-console)
+**good-console** is part of the **hapi** ecosystem and was designed to work seamlessly with the [hapi web framework](https://hapi.dev) and its other components (but works great on its own or with other frameworks). If you are using a different web framework and find this module useful, check out [hapi](https://hapi.dev) – they work even better together.
+
+### Visit the [hapi.dev](https://hapi.dev) Developer Portal for tutorials, documentation, and support
+
+## Useful resources
+
+- [Documentation and API](https://hapi.dev/family/good-console/)
+- [Version status](https://hapi.dev/resources/status/#good-console) (builds, dependencies, node versions, licenses, eol)
+- [Project policies](https://hapi.dev/policies/)
+- [Free and commercial support options](https://hapi.dev/support/)
 
 ## Note: this module is being deprecated on December 1st, 2019 due to lack to available support resources. Please consider using [another logging plugin](https://hapi.dev/plugins/#logging).
