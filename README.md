@@ -12,6 +12,7 @@
 
 - [Documentation and API](https://hapi.dev/family/good-console/)
 - [Version status](https://hapi.dev/resources/status/#good-console) (builds, dependencies, node versions, licenses, eol)
+- [Changelog](https://hapi.dev/family/good-console/changelog/)
 - [Project policies](https://hapi.dev/policies/)
 - [Free and commercial support options](https://hapi.dev/support/)
 
