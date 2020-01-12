@@ -36,7 +36,7 @@ describe('GoodConsole', () => {
                 reader.push(internals.response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -61,7 +61,7 @@ describe('GoodConsole', () => {
                 reader.push(response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -86,7 +86,7 @@ describe('GoodConsole', () => {
                 reader.push(response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -108,7 +108,7 @@ describe('GoodConsole', () => {
                 reader.push(internals.response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -135,7 +135,7 @@ describe('GoodConsole', () => {
                 reader.push(response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -160,7 +160,7 @@ describe('GoodConsole', () => {
                 reader.push(response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -185,7 +185,7 @@ describe('GoodConsole', () => {
                 reader.push(response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -210,7 +210,7 @@ describe('GoodConsole', () => {
                 reader.push(response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -235,7 +235,7 @@ describe('GoodConsole', () => {
                 reader.push(response);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -263,7 +263,7 @@ describe('GoodConsole', () => {
 
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(20);
@@ -288,7 +288,7 @@ describe('GoodConsole', () => {
                 reader.push(internals.error);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -314,7 +314,7 @@ describe('GoodConsole', () => {
                 reader.push(internals.request);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -340,7 +340,7 @@ describe('GoodConsole', () => {
                 reader.push(internals.default);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -366,7 +366,7 @@ describe('GoodConsole', () => {
                 reader.push(noData);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -392,7 +392,7 @@ describe('GoodConsole', () => {
                 reader.push(defaultEvent);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -418,7 +418,7 @@ describe('GoodConsole', () => {
                 reader.push(defaultEvent);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
@@ -444,7 +444,7 @@ describe('GoodConsole', () => {
                 reader.push(defaultEvent);
                 reader.push(null);
 
-                const team = new Teamwork();
+                const team = new Teamwork.Team();
                 reader.once('end', () => {
 
                     expect(out.data).to.have.length(1);
