@@ -9,14 +9,13 @@
   ],
   "dependencies": {
     "@hapi/hoek": "9.x.x",
-    "@hapi/joi": "17.x.x",
     "json-stringify-safe": "5.x.x",
     "moment": "2.x.x"
   },
   "devDependencies": {
     "@hapi/code": "8.x.x",
-    "@hapi/lab": "22.x.x",
-    "@hapi/teamwork": "4.x.x"
+    "@hapi/lab": "23.x.x",
+    "@hapi/teamwork": "5.x.x"
   },
   "scripts": {
     "test": "lab -t 100 -L -a @hapi/code"
