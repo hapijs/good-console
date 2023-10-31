@@ -1,12 +1,23 @@
 {
-  "name": "@hapi/good-console",
+  "name": "@teladoc/good-console",
   "version": "9.0.1",
-  "repository": "git://github.com/hapijs/good-console",
   "description": "Console broadcasting for Good process monitor",
-  "main": "lib/index.js",
+  "source": "src/index.js",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/healthiestyou/good-console.git"
+  },
+  "auto": {
+    "extends": "@teladoc"
+  },
   "files": [
-    "lib"
+    "dist"
   ],
+  "publishConfig": {
+    "private": true,
+    "registry": "https://artifactory.intouchhealth.io/artifactory/api/npm/npm/"
+  },
   "dependencies": {
     "@hapi/hoek": "9.x.x",
     "json-stringify-safe": "5.x.x",
@@ -15,10 +26,16 @@
   "devDependencies": {
     "@hapi/code": "8.x.x",
     "@hapi/lab": "24.x.x",
-    "@hapi/teamwork": "5.x.x"
+    "@hapi/teamwork": "5.x.x",
+    "@teladoc/auto-config": "^1.1.7",
+    "auto": "^11.0.4",
+    "typescript": "^4.9.4"
   },
   "scripts": {
-    "test": "lab -t 100 -L -a @hapi/code"
+    "test": "lab -t 100 -L -a @hapi/code",
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "release": "npx auto shipit"
   },
   "license": "BSD-3-Clause"
 }

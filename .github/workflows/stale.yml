@@ -1,0 +1,31 @@
+# This workflow warns and then closes issues and PRs that have had no activity for a specified amount of time.
+#
+# You can adjust the behavior by modifying this file.
+# For more information, see:
+# https://github.com/actions/stale
+name: "Close stale PRs"
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # “At 00:00", see https://crontab.guru/every-day-at-midnight
+
+permissions:
+  contents: write # only for delete-branch option
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v8
+        with:
+          stale-pr-message: "This PR is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 10 days."
+          close-pr-message: "This PR was closed because it has been stalled for 10 days with no activity."
+          exempt-pr-labels: "awaiting-approval,work-in-progress"
+          exempt-draft-pr: true # will not mark draft PRs as stale
+          days-before-pr-stale: 30
+          days-before-pr-close: 10
+          stale-pr-label: "stale"
+          delete-branch: true
+          operations-per-run: 1000
