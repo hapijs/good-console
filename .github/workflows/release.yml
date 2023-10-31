@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - next
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Prepare repository
+        run: git fetch --tags
+
+      - name: Use Node.js v18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: "https://artifactory.intouchhealth.io/artifactory/api/npm/npm"
+          cache: "npm"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install dependencies
+        # Skip post-install scripts here, as a malicious
+        # script could steal NODE_AUTH_TOKEN.
+        run: npm ci --ignore-scripts
+
+      - name: Publish new, context aware release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          MICROSOFT_TEAMS_WEBHOOK_URL: ""
+        run: npm run release

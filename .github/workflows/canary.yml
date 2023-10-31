@@ -1,0 +1,49 @@
+name: Canary Release
+
+on:
+  pull_request:
+    types: [opened, reopened, labeled, unlabeled, synchronize]
+
+# Runs only the latest workflow for a PR or source branch
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  check-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: scotttball/pr-label-check-and-comment-action@main
+        with:
+          required_labels: >-
+            breaking, feature, build, chore, ci, docs, fix, perf, refactor,
+            revert, style, test, upgrade, skip-release, internal
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  canary:
+    needs: check-labels
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@master
+
+      - name: Use Node.js v18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: "https://artifactory.intouchhealth.io/artifactory/api/npm/npm"
+          cache: "npm"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install dependencies
+        # Skip post-install scripts here, as a malicious
+        # script could steal NODE_AUTH_TOKEN.
+        run: npm ci --ignore-scripts
+
+      - name: Publish new Canary release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release
